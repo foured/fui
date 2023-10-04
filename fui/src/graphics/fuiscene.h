@@ -28,6 +28,8 @@ namespace fui {
 		void terminate();
 		void setShouldClose(bool value);
 
+		glm::vec2 getMousePosInNDC();
+
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 	};
 }

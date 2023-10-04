@@ -83,3 +83,13 @@ void fui::scene::processInput() {
         setShouldClose(true);
     }
 }
+
+glm::vec2 fui::scene::getMousePosInNDC() {
+    int x = Mouse::getMouseX();
+    int y = Mouse::getMouseY();
+
+    double x2s = x / (double)fui::scene::width;
+    double y2s = y / (double)fui::scene::height;
+
+    return glm::vec2((x2s - 0.5f) * 2, -(y2s - 0.5f) * 2);
+}

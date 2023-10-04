@@ -144,16 +144,27 @@
   <ItemGroup>
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\stb.cpp" />
-    <ClCompile Include="src\fuiscene.cpp" />
+    <ClCompile Include="src\algorithms\rectboreder2d.cpp" />
+    <ClCompile Include="src\graphics\fuiscene.cpp" />
+    <ClCompile Include="src\graphics\mesh2d.cpp" />
+    <ClCompile Include="src\graphics\model2d.cpp" />
+    <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\io\keyboard.cpp" />
     <ClCompile Include="src\io\mouse.cpp" />
     <ClCompile Include="src\mian.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
+    <None Include="assets\shaders\object.fs" />
+    <None Include="assets\shaders\object.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\fuiscene.h" />
+    <ClInclude Include="src\algorithms\rectboreder2d.h" />
+    <ClInclude Include="src\graphics\fuiscene.h" />
+    <ClInclude Include="src\graphics\mesh2d.h" />
+    <ClInclude Include="src\graphics\model2d.h" />
+    <ClInclude Include="src\graphics\models\rect.hpp" />
+    <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\io\keyboard.h" />
     <ClInclude Include="src\io\mouse.h" />
   </ItemGroup>
