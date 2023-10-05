@@ -23,8 +23,9 @@ int main() {
     scene.init();
 
     Shader shader("assets/shaders/object.vs", "assets/shaders/object.fs");
-
     r.init();
+    r.generateInstance(glm::vec2(0.0));
+    r.initInstances();
     while (!scene.shouldClose())
     {
         scene.update();
@@ -32,7 +33,7 @@ int main() {
         processInput();
 
         shader.activate();
-        r.render(shader);
+        r.renderInstances(shader);
 
         scene.newFrame();
     }

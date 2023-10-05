@@ -18,7 +18,7 @@ namespace fui {
 		static unsigned int width, height;
 		glm::vec4 windowColor;
 
-		scene(int width = 800, int height = 600, const char* title = "Hello OpenGL!", glm::vec4 color = glm::vec4(0.41, 0.62, 0.69, 1.0));
+		scene(int width = 800, int height = 800, const char* title = "Hello OpenGL!", glm::vec4 color = glm::vec4(0.41, 0.62, 0.69, 1.0));
 
 		void processInput();
 		int init();
