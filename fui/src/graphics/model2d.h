@@ -15,7 +15,6 @@ namespace fui {
 
 	class model2D {
 	public:
-		rectBorder2D border;
 		std::vector<mesh2D> meshes;
 		std::string id;
 
@@ -32,6 +31,7 @@ namespace fui {
 
 	private:
 		BufferObject posVBO, sizeVBO;
+		rectBorder2D border;
 	};
 }
 

@@ -11,22 +11,14 @@ void fui::model2D::renderInstances(Shader shader) {
 		sizes.push_back(glm::vec3(instances[i]->size, 1.0));
 	}
 
-	//glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, instances.size() * sizeof(glm::vec3), &positions[0]);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, sizeVBO);
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, instances.size() * sizeof(glm::vec3), &sizes[0]);
-
 	posVBO.bind();
 	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
 
 	sizeVBO.bind();
 	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
 
-	for (int j = 0, size = instances.size(); j < size; j++) {
-		for (int i = 0, len = meshes.size(); i < len; i++) {
-			meshes[i].render(size);
-		}
+	for (int i = 0, len = meshes.size(); i < len; i++) {
+		meshes[i].render(instances.size());
 	}
 }
 
@@ -45,7 +37,7 @@ void fui::model2D::calcRectBorder2D() {
 }
 
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	instances.push_back(new transform2D(pos, size, rotation, this));
+	instances.push_back(new transform2D(pos, size, rotation, this, &border));
 }
 
 void fui::model2D::initInstances(){
@@ -54,21 +46,7 @@ void fui::model2D::initInstances(){
 	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
 		positions.push_back(glm::vec3(instances[i]->position, 0.0));
 		sizes.push_back(glm::vec3(instances[i]->size, 1.0));
-
-		float x = instances[i]->size.x;
-		float y = instances[i]->size.y;
-
-		std::cout << x << std::endl;
-		std::cout << y << std::endl;
 	}
-
-	//glGenBuffers(1, &posVBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-	//glBufferData(GL_ARRAY_BUFFER, instances.size() * sizeof(glm::vec3), &positions[0], GL_DYNAMIC_DRAW);
-
-	//glGenBuffers(1, &sizeVBO);
-	//glBindBuffer(GL_ARRAY_BUFFER, sizeVBO);
-	//glBufferData(GL_ARRAY_BUFFER, instances.size() * sizeof(glm::vec3), &sizes[0], GL_DYNAMIC_DRAW);
 
 	posVBO = BufferObject(GL_ARRAY_BUFFER);
 	posVBO.generate();
@@ -81,20 +59,6 @@ void fui::model2D::initInstances(){
 	sizeVBO.setData<glm::vec3>(instances.size(), &sizes[0], GL_DYNAMIC_DRAW);
 
 	for (unsigned int i = 0, size = meshes.size(); i < size; i++) {
-		//glBindVertexArray(meshes[i].VAO);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, posVBO);
-		//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(glm::vec3), (void*)(0 * sizeof(glm::vec3)));
-		//glEnableVertexAttribArray(1);
-		//glVertexAttribDivisor(1, 1);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, sizeVBO);
-		//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(glm::vec3), (void*)(0 * sizeof(glm::vec3)));
-		//glEnableVertexAttribArray(2);
-		//glVertexAttribDivisor(2, 1);
-
-		//glBindVertexArray(0);
-
 		meshes[i].VAO.bind();
 
 		posVBO.bind();

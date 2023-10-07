@@ -29,6 +29,7 @@ namespace fui {
 		void setShouldClose(bool value);
 
 		glm::vec2 getMousePosInNDC();
+		glm::vec2 getMousePosInPixels();
 
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 	};

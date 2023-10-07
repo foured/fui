@@ -1,5 +1,7 @@
 #include "mouse.h"
 
+#include <iostream>
+
 double Mouse::x = 0;
 double Mouse::y = 0;
 
@@ -33,6 +35,10 @@ void Mouse::cursorPosCallback(GLFWwindow* window, double _x, double _y){
 
 	lastX = x;
 	lastY = y;
+
+	//std::cout << x << std::endl;
+	//std::cout << y << std::endl;
+	//std::cout << "" << std::endl;
 }
 void Mouse::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
 	if (action != GLFW_RELEASE) {

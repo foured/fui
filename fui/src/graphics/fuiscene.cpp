@@ -91,5 +91,10 @@ glm::vec2 fui::scene::getMousePosInNDC() {
     double x2s = x / (double)fui::scene::width;
     double y2s = y / (double)fui::scene::height;
 
-    return glm::vec2((x2s - 0.5f) * 2, -(y2s - 0.5f) * 2);
+    return glm::vec2((x2s - 0.5f) * 2, - (y2s - 0.5f) * 2);
+}
+
+glm::vec2 fui::scene::getMousePosInPixels() {
+    glm::vec2 res = glm::vec2(Mouse::getMouseX(), 800.0 - Mouse::getMouseY());
+    return res;
 }

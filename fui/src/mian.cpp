@@ -24,7 +24,7 @@ int main() {
 
     Shader shader("assets/shaders/object.vs", "assets/shaders/object.fs");
     r.init();
-    r.generateInstance(glm::vec2(0.0));
+    r.generateInstance(glm::vec2(0.0), glm::vec2(0.5));
     r.initInstances();
     while (!scene.shouldClose())
     {
@@ -32,7 +32,6 @@ int main() {
 
         processInput();
 
-        shader.activate();
         r.renderInstances(shader);
 
         scene.newFrame();
@@ -46,7 +45,14 @@ void processInput() {
     scene.processInput();
 
 
-    if (Mouse::buttonWentDown(GLFW_MOUSE_BUTTON_1)) {
-        std::cout << r.border.isDotInRect(scene.getMousePosInNDC()) << std::endl;
+    if (Mouse::button(GLFW_MOUSE_BUTTON_1)) {
+        for (int i = 0; i < r.instances.size(); i++) {
+            if (r.instances[i]->border.isDotInRect(scene.getMousePosInNDC())) {
+                float x = Mouse::getDX();
+                float y = Mouse::getDY();
+                if (x != 0 || y != 0)
+                r.instances[i]->addPositionInPixels(glm::vec2(x, y));
+            }
+        }
     }
 }
