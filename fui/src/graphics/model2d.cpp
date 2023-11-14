@@ -18,18 +18,18 @@ void fui::model2D::renderInstances(Shader shader) {
 	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
 
 	for (int i = 0, len = meshes.size(); i < len; i++) {
-		meshes[i].render(instances.size());
+		meshes[i].render(instances.size(), shader);
 	}
 }
 
 void fui::model2D::calcRectBorder2D() {
 	for (int i = 0, len = meshes.size(); i < len; i++) {
 		for (int j = 0, len1 = meshes[i].vertices.size(); j < len1; j += 3) {
-			float val = meshes[i].vertices[j];
+			float val = meshes[i].vertices[j].pos.x;
 			if (border.min.x > val) border.min.x = val;
 			if (border.max.x < val) border.max.x = val;
 
-			val = meshes[i].vertices[j + 1];
+			val = meshes[i].vertices[j].pos.y;
 			if (border.min.y > val) border.min.y = val;
 			if (border.max.y < val) border.max.y = val;
 		}

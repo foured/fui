@@ -1,7 +1,18 @@
 #version 330 core
 out vec4 FragColor;
 
+in vec2 texCoord;
+
+uniform vec3 color;
+uniform sampler2D oTexture;
+uniform int hasTexture;
+
 void main()
 {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    if(hasTexture == 1){
+        FragColor = texture(oTexture, texCoord);
+    }
+    else{
+        FragColor = vec4(color, 1.0);
+    }
 }

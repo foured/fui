@@ -6,10 +6,10 @@
 #include "../model2d.h"
 
 std::vector<float> vert = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+     0.5f,  0.5f, 0.0f,   0.0f, 0.0f, // top right
+     0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom right
+    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
+    -0.5f,  0.5f, 0.0f,   0.0f, 0.0f  // top left 
 };
 
 class rect : public fui::model2D {
@@ -25,9 +25,9 @@ public:
             1, 2, 3    // second triangle
         };
 
-        fui::mesh2D ret;
+        fui::mesh2D ret(glm::vec3(1.0, 0.0, 0.0));
 
-        ret.setup(vertices, indices);
+        ret.setup(fui::vertex::generateVertices(vertices), indices);
 
         meshes.push_back(ret);
         calcRectBorder2D();

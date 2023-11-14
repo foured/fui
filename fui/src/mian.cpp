@@ -50,7 +50,6 @@ void processInput() {
             if (r.instances[i]->border.isDotInRect(scene.getMousePosInNDC())) {
                 float x = Mouse::getDX();
                 float y = Mouse::getDY();
-                if (x != 0 || y != 0)
                 r.instances[i]->addPositionInPixels(glm::vec2(x, y));
             }
         }

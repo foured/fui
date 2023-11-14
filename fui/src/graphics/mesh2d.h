@@ -7,7 +7,9 @@
 
 #include <vector>
 
+#include "shader.h"
 #include "vertexmemory.hpp"
+#include "texture.h"
 
 namespace fui {
 	struct vertex {
@@ -22,11 +24,18 @@ namespace fui {
 		//unsigned int VBO, VAO, EBO;
 		ArrayObject VAO;
 
-		std::vector<float> vertices;
+		std::vector<vertex> vertices;
 		std::vector<unsigned int> indices;
 
-		void setup(std::vector<float> _vertices, std::vector<unsigned int> _indices);
-		void render(unsigned int noInstances, GLuint renderType = GL_FILL);
+		texture meshTexture;
+		glm::vec3 color;
+		bool hasTexture;
+
+		mesh2D(glm::vec3 color = glm::vec3(1.0, 0.5, 0.2));
+		mesh2D(texture texture);
+
+		void setup(std::vector<vertex> _vertices, std::vector<unsigned int> _indices);
+		void render(unsigned int noInstances, Shader shader, GLuint renderType = GL_FILL);
 	};
 	
 }

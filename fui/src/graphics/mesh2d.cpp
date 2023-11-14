@@ -1,10 +1,18 @@
 #include "mesh2d.h"
 
+#include <iostream>
+
+fui::mesh2D::mesh2D(glm::vec3 color)
+	: color(color), hasTexture(false) {}
+
+fui::mesh2D::mesh2D(texture texture) 
+	: meshTexture(texture), hasTexture(true) {}
+
 std::vector<fui::vertex> fui::vertex::generateVertices(std::vector<float> verticesData) {
-	int vsize = verticesData.size() / 5;
+	int vsize = verticesData.size();
 	std::vector<fui::vertex> vertices(vsize);
 
-	for (int i = 0; i < vsize; i++) {
+	for (int i = 0; i < vsize; i += 5) {
 		vertices[i].pos = {
 			verticesData[i + 0],
 			verticesData[i + 1],
@@ -19,25 +27,9 @@ std::vector<fui::vertex> fui::vertex::generateVertices(std::vector<float> vertic
 	return vertices;
 }
 
-void fui::mesh2D::setup(std::vector<float> _vertices, std::vector<unsigned int> _indices) {
+void fui::mesh2D::setup(std::vector<vertex> _vertices, std::vector<unsigned int> _indices) {
 	this->indices = _indices;
 	this->vertices = _vertices;
-
-	//glGenVertexArrays(1, &VAO);
-	//glGenBuffers(1, &VBO);
-	//glGenBuffers(1, &EBO);
-
-	//glBindVertexArray(VAO);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(float), &indices[0], GL_STATIC_DRAW);
-
-
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
 
 	VAO.generate();
 	VAO.bind();
@@ -46,28 +38,35 @@ void fui::mesh2D::setup(std::vector<float> _vertices, std::vector<unsigned int> 
 	VAO["EBO"] = BufferObject(GL_ELEMENT_ARRAY_BUFFER);
 	VAO["EBO"].generate();
 	VAO["EBO"].bind();
-	VAO["EBO"].setData<GLuint>(this->indices.size(), &this->indices[0], GL_STATIC_DRAW);
+	VAO["EBO"].setData<GLuint>(indices.size(), &this->indices[0], GL_STATIC_DRAW);
 
 	// load data into vertex buffers
 	VAO["VBO"] = BufferObject(GL_ARRAY_BUFFER);
 	VAO["VBO"].generate();
 	VAO["VBO"].bind();
-	VAO["VBO"].setData<GLfloat>(vertices.size(), &this->vertices[0], GL_STATIC_DRAW);
+	VAO["VBO"].setData<vertex>(vertices.size(), &this->vertices[0], GL_STATIC_DRAW);
 
 	VAO["VBO"].bind();
-	VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 0, 0);
+	VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 8, 0);
+	VAO["VBO"].setAttPointer<GLfloat>(3, 3, GL_FLOAT, 8, 3);
 	VAO["VBO"].clear();
 
 	ArrayObject::clear();
 }
 
-void fui::mesh2D::render(unsigned int noInstances, GLuint renderType) {
-	//glBindVertexArray(VAO);
-	//glPolygonMode(GL_FRONT_AND_BACK, renderType);
-	//glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0, noInstances);
-	//glBindVertexArray(0);
+void fui::mesh2D::render(unsigned int noInstances, Shader shader, GLuint renderType) {
+	if (hasTexture) {
+		glActiveTexture(GL_TEXTURE0);
+		shader.setInt("hasTexture", 1);
+	}
+	else {
+		shader.setInt("hasTexture", 0);
+		shader.set3Float("color", color);
+	}
 
 	VAO.bind();
 	VAO.draw(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, noInstances);
 	ArrayObject::clear();
+
+	glActiveTexture(GL_TEXTURE0);
 }
