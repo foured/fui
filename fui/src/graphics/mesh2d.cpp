@@ -9,18 +9,18 @@ fui::mesh2D::mesh2D(texture texture)
 	: meshTexture(texture), hasTexture(true) {}
 
 std::vector<fui::vertex> fui::vertex::generateVertices(std::vector<float> verticesData) {
-	int vsize = verticesData.size();
+	int vsize = verticesData.size() / 5; // 5 floats per vertex
 	std::vector<fui::vertex> vertices(vsize);
-
-	for (int i = 0; i < vsize; i += 5) {
-		vertices[i].pos = {
-			verticesData[i + 0],
-			verticesData[i + 1],
-			verticesData[i + 2]
+	int dsize = verticesData.size();
+	for (int datai = 0, outi = 0; datai < dsize; datai += 5, outi++){
+		vertices[outi].pos = {
+			verticesData[datai + 0],
+			verticesData[datai + 1],
+			verticesData[datai + 2]
 		};
-		vertices[i].texCoord = {
-			verticesData[i + 3],
-			verticesData[i + 4]
+		vertices[outi].texCoord = {
+			verticesData[datai + 3],
+			verticesData[datai + 4]
 		};
 	}
 
