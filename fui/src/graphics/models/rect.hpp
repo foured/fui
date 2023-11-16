@@ -5,6 +5,11 @@
 
 #include "../model2d.h"
 
+std::vector<unsigned int> indices = {  // note that we start from 0!
+    0, 1, 3,   // first triangle
+    1, 2, 3    // second triangle
+};
+
 std::vector<float> vert = {
      0.5f,  0.5f, 0.0f,   0.0f, 0.0f, // top right
      0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom right
@@ -20,12 +25,7 @@ public:
 		: vertices(_vertices), model2D("rect"){ }
 
 	void init() {
-        std::vector<unsigned int> indices = {  // note that we start from 0!
-            0, 1, 3,   // first triangle
-            1, 2, 3    // second triangle
-        };
-
-        fui::mesh2D ret(glm::vec3(1.0, 0.0, 0.0));
+        fui::mesh2D ret(glm::vec3(1.0, 0.0, 0.0));      
 
         ret.setup(fui::vertex::generateVertices(vertices), indices);
 

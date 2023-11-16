@@ -1,8 +1,8 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aOffset;
+layout (location = 1) in vec2 aTexCoord;
 layout (location = 2) in vec3 aSize;
-layout (location = 3) in vec2 aTexCoord;
+layout (location = 3) in vec3 aOffset;
 
 out vec2 texCoord;
 

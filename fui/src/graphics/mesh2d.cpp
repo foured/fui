@@ -47,8 +47,8 @@ void fui::mesh2D::setup(std::vector<vertex> _vertices, std::vector<unsigned int>
 	VAO["VBO"].setData<vertex>(vertices.size(), &this->vertices[0], GL_STATIC_DRAW);
 
 	VAO["VBO"].bind();
-	VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 8, 0);
-	VAO["VBO"].setAttPointer<GLfloat>(3, 3, GL_FLOAT, 8, 3);
+	VAO["VBO"].setAttPointer<GLfloat>(0, 3, GL_FLOAT, 5, 0);
+	VAO["VBO"].setAttPointer<GLfloat>(1, 2, GL_FLOAT, 5, 3);
 	VAO["VBO"].clear();
 
 	ArrayObject::clear();

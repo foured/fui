@@ -62,7 +62,7 @@ void fui::model2D::initInstances(){
 		meshes[i].VAO.bind();
 
 		posVBO.bind();
-		posVBO.setAttPointer<glm::vec3>(1, 3, GL_FLOAT, 1, 0, 1);
+		posVBO.setAttPointer<glm::vec3>(3, 3, GL_FLOAT, 1, 0, 1);
 
 		sizeVBO.bind();
 		sizeVBO.setAttPointer<glm::vec3>(2, 3, GL_FLOAT, 1, 0, 1);
