@@ -2,7 +2,7 @@
 
 fui::texture::texture() {}
 
-fui::texture::texture(char* path) {
+fui::texture::texture(std::string path) {
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
@@ -12,7 +12,7 @@ fui::texture::texture(char* path) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nChannels;
-	unsigned char* data = stbi_load(path, &width, &height, &nChannels, 0);
+	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nChannels, 0);
 
 	if (data) {
 		GLint colorType = GL_RGB;

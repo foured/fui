@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <string>
 
 namespace fui{
 	class texture {
@@ -13,7 +14,7 @@ namespace fui{
 		unsigned int id;
 
 		texture();
-		texture(char* path);
+		texture(std::string path);
 	};
 }
 

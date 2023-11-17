@@ -12,26 +12,38 @@
 
 namespace fui {
 	class transform2D;
-
+	class uiinteractivity;
 	class model2D {
 	public:
 		std::vector<mesh2D> meshes;
 		std::string id;
+		scene scene;
 
 		std::vector<transform2D*> instances;
 
-		model2D(std::string id);
+		std::vector<std::pair<Shader, std::vector<int>>> shadersQueue;
+
+		model2D(std::string id, fui::scene scene);
+
+		void addToShadersQueue(Shader shader, int instanceIdx);
+		void renderShadersQueue();
 
 		void init();
 		void renderInstances(Shader shader);
+		void renderInstance(Shader shader, transform2D *transform);
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();
+
 		rectBorder2D getInstanseBorder(unsigned int instanceIdx);
+		unsigned int getInstaneIdxById(std::string id);
 
 	private:
 		BufferObject posVBO, sizeVBO;
 		rectBorder2D border;
+
+		std::string currentId;
+		std::string generateId();
 	};
 }
 

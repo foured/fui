@@ -14,6 +14,12 @@ namespace fui {
 
 		bool isDotInRect(glm::vec2 dot);
 		bool isRectInRect(rectBorder2D rect);
+
+		double getDistFromPointToBorder(glm::vec2 point);
+
+	private:
+		double distance(glm::vec2 p0, glm::vec2 p1, glm::vec2 p2);
+		double distance(double x0, double y0, double x1, double y1, double x2, double  y2);
 	};
 }
 #endif // !RECTBORDER2D_H

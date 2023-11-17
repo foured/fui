@@ -146,6 +146,7 @@
     <ClCompile Include="lib\stb.cpp" />
     <ClCompile Include="src\algorithms\rectboreder2d.cpp" />
     <ClCompile Include="src\algorithms\transform2d.cpp" />
+    <ClCompile Include="src\algorithms\uiinteractivity.cpp" />
     <ClCompile Include="src\graphics\fuiscene.cpp" />
     <ClCompile Include="src\graphics\mesh2d.cpp" />
     <ClCompile Include="src\graphics\model2d.cpp" />
@@ -156,6 +157,8 @@
     <ClCompile Include="src\mian.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\shaders\outline.fs" />
+    <None Include="assets\shaders\outline.vs" />
     <None Include="glfw3.dll" />
     <None Include="assets\shaders\object.fs" />
     <None Include="assets\shaders\object.vs" />
@@ -163,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="src\algorithms\rectboreder2d.h" />
     <ClInclude Include="src\algorithms\transform2d.h" />
+    <ClInclude Include="src\algorithms\uiinteractivity.h" />
     <ClInclude Include="src\graphics\fuiscene.h" />
     <ClInclude Include="src\graphics\mesh2d.h" />
     <ClInclude Include="src\graphics\model2d.h" />
@@ -172,6 +176,9 @@
     <ClInclude Include="src\graphics\vertexmemory.hpp" />
     <ClInclude Include="src\io\keyboard.h" />
     <ClInclude Include="src\io\mouse.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\alice.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,57 @@
 #include "model2d.h"
 
-fui::model2D::model2D(std::string id)
-	: id(id) {}
+fui::model2D::model2D(std::string id, fui::scene scene)
+	: id(id), currentId("aaaaaaaa"), scene(scene) {}
+
+std::string fui::model2D::generateId() {
+	for (int i = currentId.length() - 1; i >= 0; i--) {
+		if ((int)currentId[i] != (int)'z') {
+			// increment then break
+			currentId[i] = (char)(((int)currentId[i]) + 1);
+			break;
+		}
+		else {
+			currentId[i] = 'a';
+		}
+	}
+	return currentId;
+}
+
+void fui::model2D::addToShadersQueue(Shader shader, int instanceIdx) {
+	for (int i = 0, s = shadersQueue.size(); i < s; i++) {
+		if (shadersQueue[i].first.id == shader.id) {
+			shadersQueue[i].second.push_back(instanceIdx);
+			return;
+		}
+	}
+
+	shadersQueue.push_back(std::pair<Shader, std::vector<int>>(shader, std::vector<int>{instanceIdx}));
+}
+
+void fui::model2D::renderShadersQueue() {
+	for (int i = 0, s = shadersQueue.size(); i < s; i++) {
+		Shader shader = shadersQueue[i].first;
+		std::vector<int> idxs = shadersQueue[i].second;
+
+		shader.activate();
+		std::vector<glm::vec3> positions, sizes;
+		for (unsigned int i = 0, size = idxs.size(); i < size; i++) {
+			positions.push_back(glm::vec3(instances[idxs[i]]->position, 0.0));
+			sizes.push_back(glm::vec3(instances[idxs[i]]->size, 1.0));
+		}
+
+		posVBO.bind();
+		posVBO.updateData<glm::vec3>(0, positions.size(), &positions[0]);
+
+		sizeVBO.bind();
+		sizeVBO.updateData<glm::vec3>(0, sizes.size(), &sizes[0]);
+
+		for (int i = 0, len = meshes.size(); i < len; i++) {
+			meshes[i].render(sizes.size(), shader);
+		}
+	}
+	shadersQueue.clear();
+}
 
 void fui::model2D::renderInstances(Shader shader) {
 	shader.activate();
@@ -10,6 +60,24 @@ void fui::model2D::renderInstances(Shader shader) {
 		positions.push_back(glm::vec3(instances[i]->position, 0.0));
 		sizes.push_back(glm::vec3(instances[i]->size, 1.0));
 	}
+
+	posVBO.bind();
+	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
+
+	sizeVBO.bind();
+	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
+
+	for (int i = 0, len = meshes.size(); i < len; i++) {
+		meshes[i].render(instances.size(), shader);
+	}
+}
+
+void fui::model2D::renderInstance(Shader shader, transform2D *transform){
+	shader.activate();
+	std::vector<glm::vec3> positions, sizes;
+
+	positions.push_back(glm::vec3(transform->position, 0.0));
+	sizes.push_back(glm::vec3(transform->size, 1.0));
 
 	posVBO.bind();
 	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
@@ -37,7 +105,7 @@ void fui::model2D::calcRectBorder2D() {
 }
 
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	instances.push_back(new transform2D(pos, size, rotation, this, &border));
+	instances.push_back(new transform2D(pos, size, rotation, this, &border, generateId()));
 }
 
 void fui::model2D::initInstances(){
@@ -75,6 +143,13 @@ fui::rectBorder2D fui::model2D::getInstanseBorder(unsigned int instanceIdx) {
 	transform2D* instance = instances[instanceIdx];
 	return rectBorder2D(glm::vec2(border.min.x + instance->position.x, border.min.y + instance->position.y) * instance->size,
 		glm::vec2(border.max.x + instance->position.x, border.max.y + instance->position.y) * instance->size);
+}
+
+unsigned int fui::model2D::getInstaneIdxById(std::string id) {
+	for (int i = 0, s = instances.size(); i < s; i++) {
+		if (instances[i]->indstanceId == id) return i;
+	}
+	return -1;
 }
 
 void fui::model2D::init(){}

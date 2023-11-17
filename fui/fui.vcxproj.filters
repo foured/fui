@@ -51,11 +51,16 @@
     <ClCompile Include="src\graphics\texture.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\algorithms\uiinteractivity.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
     <None Include="assets\shaders\object.vs" />
     <None Include="assets\shaders\object.fs" />
+    <None Include="assets\shaders\outline.fs" />
+    <None Include="assets\shaders\outline.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\fuiscene.h">
@@ -91,5 +96,13 @@
     <ClInclude Include="src\graphics\texture.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\algorithms\uiinteractivity.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\alice.jpg">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

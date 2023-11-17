@@ -9,9 +9,11 @@
 #include "../graphics/model2d.h"
 
 #include "rectboreder2d.h"
+#include "uiinteractivity.h"
 
 namespace fui {
 	class model2D;
+	class uiinteractivity;
 
 	class transform2D {
 	public:
@@ -20,18 +22,18 @@ namespace fui {
 		glm::vec3 rotation;
 
 		rectBorder2D border;
+		uiinteractivity interactivity;
 
 		model2D* model;
 		std::string indstanceId;
 
-		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder);
+		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder, std::string instanceId);
 
 		glm::vec2 getPositionInPixels();
 		glm::vec2 getSizeInPixels();
 
 		void setPositionInPixels(glm::vec2 posInPix);
 		void addPositionInPixels(glm::vec2 offsetInPix);
-
 	private:
 		rectBorder2D* modelBoreder;
 
