@@ -3,7 +3,7 @@
 fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder, std::string instanceId)
 	: position(pos), size(size), rotation(rotation), model(model), modelBoreder(modelBoreder), indstanceId(instanceId) {
 	calculateBoredr();
-	interactivity = uiinteractivity(this, model->scene);
+	interactivity = uiinteractivity(this);
 }
 
 glm::vec2 fui::transform2D::getPositionInPixels() {

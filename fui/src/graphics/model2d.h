@@ -17,20 +17,18 @@ namespace fui {
 	public:
 		std::vector<mesh2D> meshes;
 		std::string id;
-		scene scene;
 
 		std::vector<transform2D*> instances;
 
 		std::vector<std::pair<Shader, std::vector<int>>> shadersQueue;
 
-		model2D(std::string id, fui::scene scene);
+		model2D(std::string id);
 
 		void addToShadersQueue(Shader shader, int instanceIdx);
 		void renderShadersQueue();
 
 		void init();
 		void renderInstances(Shader shader);
-		void renderInstance(Shader shader, transform2D *transform);
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();

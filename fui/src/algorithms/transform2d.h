@@ -8,12 +8,11 @@
 #include "../graphics/fuiscene.h"
 #include "../graphics/model2d.h"
 
-#include "rectboreder2d.h"
 #include "uiinteractivity.h"
+#include "rectboreder2d.h"
 
 namespace fui {
 	class model2D;
-	class uiinteractivity;
 
 	class transform2D {
 	public:

@@ -21,8 +21,8 @@ class rect : public fui::model2D {
 public:
     std::vector<float> vertices;
 
-    rect(fui::scene scene, std::vector<float> _vertices = vert)
-		: vertices(_vertices), model2D("rect", scene){ }
+    rect(std::vector<float> _vertices = vert)
+		: vertices(_vertices), model2D("rect"){ }
 
 	void init() {
         //fui::mesh2D ret(glm::vec3(1.0, 0.0, 0.0));      

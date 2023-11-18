@@ -1,7 +1,9 @@
 #include "model2d.h"
 
-fui::model2D::model2D(std::string id, fui::scene scene)
-	: id(id), currentId("aaaaaaaa"), scene(scene) {}
+fui::model2D::model2D(std::string id)
+	: id(id), currentId("aaaaaaaa") {
+	
+}
 
 std::string fui::model2D::generateId() {
 	for (int i = currentId.length() - 1; i >= 0; i--) {
@@ -72,27 +74,9 @@ void fui::model2D::renderInstances(Shader shader) {
 	}
 }
 
-void fui::model2D::renderInstance(Shader shader, transform2D *transform){
-	shader.activate();
-	std::vector<glm::vec3> positions, sizes;
-
-	positions.push_back(glm::vec3(transform->position, 0.0));
-	sizes.push_back(glm::vec3(transform->size, 1.0));
-
-	posVBO.bind();
-	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
-
-	sizeVBO.bind();
-	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
-
-	for (int i = 0, len = meshes.size(); i < len; i++) {
-		meshes[i].render(instances.size(), shader);
-	}
-}
-
 void fui::model2D::calcRectBorder2D() {
 	for (int i = 0, len = meshes.size(); i < len; i++) {
-		for (int j = 0, len1 = meshes[i].vertices.size(); j < len1; j += 3) {
+		for (int j = 0, len1 = meshes[i].vertices.size(); j < len1; j++) {
 			float val = meshes[i].vertices[j].pos.x;
 			if (border.min.x > val) border.min.x = val;
 			if (border.max.x < val) border.max.x = val;

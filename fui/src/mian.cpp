@@ -16,7 +16,7 @@
 
 fui::scene scene;
 
-rect r(scene);
+rect r;
 
 Shader outlineShader;
 
@@ -30,14 +30,9 @@ int main() {
     r.init();
     r.generateInstance(glm::vec2(0.0), glm::vec2(0.5));
     r.initInstances();
-    float lastTime = glfwGetTime();
+
     while (!scene.shouldClose())
     {
-        float currentTime = glfwGetTime();
-        float deltaTime = currentTime - lastTime;
-        lastTime = currentTime;
-        std::cout << "FPS: " << (int)(1 / deltaTime)<< std::endl;
-
         scene.update();
 
         processInput();
@@ -57,13 +52,7 @@ void processInput() {
 
     if (Mouse::button(GLFW_MOUSE_BUTTON_1)) {
         for (int i = 0; i < r.instances.size(); i++) {
-            if (r.instances[i]->border.isDotInRect(scene.getMousePosInNDC())) {
-                float x = Mouse::getDX();
-                float y = Mouse::getDY();
-                if(r.instances[i]->border.getDistFromPointToBorder(scene.getMousePosInNDC()) < 0.2)
-                    r.addToShadersQueue(outlineShader, i);
-                r.instances[i]->addPositionInPixels(glm::vec2(x, y));
-            }
+            r.instances[i]->interactivity.update(outlineShader);
         }
     }
 }

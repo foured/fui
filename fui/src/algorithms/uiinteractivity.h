@@ -4,8 +4,6 @@
 #include "../graphics/shader.h"
 #include "../graphics/fuiscene.h"
 
-#include "transform2d.h"
-
 namespace fui {
 	class transform2D;
 
@@ -13,15 +11,16 @@ namespace fui {
 	public:
 		transform2D *instance;
 
-		uiinteractivity(transform2D* transform, scene scene);
+		uiinteractivity();
+		uiinteractivity(transform2D* transform);
 
 		bool isDraggable;
 		bool isResizeable;
 
+		double distToOutline;
+
 		void update(Shader outlineShader);
 		void drag(Shader outlineShader);
-
-		scene scene;
 	};
 }
 
