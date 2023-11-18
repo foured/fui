@@ -17,7 +17,7 @@ glm::vec2 fui::transform2D::getSizeInPixels() {
 }
 
 void fui::transform2D::setPositionInPixels(glm::vec2 posInPix) {
-	position = glm::vec2(((posInPix.x / (double)fui::scene::width) - 0.5) * 2, ((posInPix.y / (double)fui::scene::height) - 0.5) * 2);
+	position = glm::vec2(((posInPix.x / (double)fui::scene::width) - 0.5) * 2.0, ((posInPix.y / (double)fui::scene::height) - 0.5) * 2.0);
 	calculateBoredr();
 }
 
@@ -27,4 +27,15 @@ void fui::transform2D::addPositionInPixels(glm::vec2 offsetInPix) {
 
 void fui::transform2D::calculateBoredr() {
 	border = rectBorder2D(modelBoreder->min * size + position, modelBoreder->max * size + position);
+}
+
+void fui::transform2D::changeSize(glm::vec2 offsetInPix) {
+	glm::vec2 sizeInPix = getSizeInPixels();
+	sizeInPix += offsetInPix;
+	sizeInPix = glm::vec2(sizeInPix.x / (double)fui::scene::width, sizeInPix.y / (double)fui::scene::height);
+	if (sizeInPix.x > 0.005)
+		size = glm::vec2(sizeInPix.x, size.y);
+	if (sizeInPix.y > 0.005)
+		size = glm::vec2(size.x, sizeInPix.y);
+	calculateBoredr();
 }

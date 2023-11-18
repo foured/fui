@@ -22,10 +22,26 @@ void fui::rectBorder2D::calculateOrigin() {
 bool fui::rectBorder2D::isPointCloseToBorder(glm::vec2 point, double distToBorder){
 	bool res = false;
 
-	res  = res || rectBorder2D(min, glm::vec2(max.x, min.y + distToBorder)).isDotInRect(point); // down
-	res  = res || rectBorder2D(glm::vec2(min.x, max.y - distToBorder), max).isDotInRect(point); // top
-	res  = res || rectBorder2D(min, glm::vec2(min.x + distToBorder, max.y)).isDotInRect(point); // left
-	res  = res || rectBorder2D(glm::vec2(max.x - distToBorder, min.y), max).isDotInRect(point); // right
+	res = res || rectBorder2D(min, glm::vec2(max.x, min.y + distToBorder)).isDotInRect(point); // down
+	res = res || rectBorder2D(glm::vec2(min.x, max.y - distToBorder), max).isDotInRect(point); // top
+	res = res || rectBorder2D(min, glm::vec2(min.x + distToBorder, max.y)).isDotInRect(point); // left
+	res = res || rectBorder2D(glm::vec2(max.x - distToBorder, min.y), max).isDotInRect(point); // right
 
 	return res;
+}
+glm::vec2 fui::rectBorder2D::getQuatersOfBorderContactWithPoint(glm::vec2 point, double distToBorder) {
+	glm::vec2 res = glm::vec2(0.0);
+
+	if (rectBorder2D(min, glm::vec2(max.x, min.y + distToBorder)).isDotInRect(point)) res = glm::vec2(res.x, -1); // down
+	if (rectBorder2D(glm::vec2(min.x, max.y - distToBorder), max).isDotInRect(point)) res = glm::vec2(res.x, 1);  // top
+	if (rectBorder2D(min, glm::vec2(min.x + distToBorder, max.y)).isDotInRect(point)) res = glm::vec2(-1, res.y); // left
+	if (rectBorder2D(glm::vec2(max.x - distToBorder, min.y), max).isDotInRect(point)) res = glm::vec2(1, res.y);  // right
+
+	return res;
+}
+int fui::rectBorder2D::getQuaterOfPoint(glm::vec2 point) {
+	if (point.x > origin.x && point.y > origin.y) return 1;
+	if (point.x < origin.x && point.y > origin.y) return 2;
+	if (point.x > origin.x && point.y < origin.y) return 4;
+	if (point.x < origin.x && point.y < origin.y) return 3;
 }

@@ -28,7 +28,7 @@ int main() {
     outlineShader = Shader("assets/shaders/outline.vs", "assets/shaders/outline.fs");
 
     r.init();
-    r.generateInstance(glm::vec2(0.0), glm::vec2(0.5));
+    r.generateInstance(glm::vec2(0.0), glm::vec2(1));
     r.initInstances();
 
     while (!scene.shouldClose())
@@ -50,9 +50,7 @@ int main() {
 void processInput() {
     scene.processInput();
 
-    if (Mouse::button(GLFW_MOUSE_BUTTON_1)) {
-        for (int i = 0; i < r.instances.size(); i++) {
-            r.instances[i]->interactivity.update(outlineShader);
-        }
+    for (int i = 0; i < r.instances.size(); i++) {
+        r.instances[i]->interactivity.update(outlineShader);
     }
 }
