@@ -14,16 +14,19 @@ fui::uiinteractivity::uiinteractivity(transform2D* transform)
 }
 
 void fui::uiinteractivity::update(Shader outlineShader) {
-    float x = Mouse::getDX();
-    float y = Mouse::getDY();
-    glm::vec2 mousePos = fui::scene::getMousePosInNDC();
 
-    if (Mouse::buttonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos)) {
+    float x = scene::getDX();
+    float y = scene::getDY();
+    glm::vec2 mousePos = scene::getMousePosInNDC();
+    if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos)) {
         isSelected = true;
         isResizing = instance->border.isPointCloseToBorder(mousePos, distToOutline);
         calculateResize(mousePos);
     }
-    if (Mouse::buttonWentUp(GLFW_MOUSE_BUTTON_1)) {
+    else if (instance->border.isPointCloseToBorder(mousePos, distToOutline)) {
+        instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.01, 0.42, 0.17));
+    }
+    if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
         isSelected = false;
         isResizing = false;
     }
@@ -42,9 +45,9 @@ void fui::uiinteractivity::drag(float mouseDX, float mouseDY) {
 void fui::uiinteractivity::resize(Shader outlineShader, float mouseDX, float mouseDY, glm::vec2 mousePos) {
     if (isResizeable && isSelected) {
         if (isResizing) {
-            instance->model->addToShadersQueue(outlineShader, instance->model->getInstaneIdxById(instance->indstanceId));
-            instance->changeSize(glm::vec2(mouseDX, mouseDY) * quaterK);
-            instance->addPositionInPixels(glm::vec2(mouseDX * xk, mouseDY * yk) * 0.25f * quaterK);
+            instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.0, 0.8, 0.1));
+            glm::vec2 m = instance->changeSizeAndGetMultiplier(glm::vec2(mouseDX, mouseDY) * quaterK);
+            instance->addPositionInPixels(glm::vec2(mouseDX * xk, mouseDY * yk) * 0.25f * quaterK * m);
         }
     }
 }

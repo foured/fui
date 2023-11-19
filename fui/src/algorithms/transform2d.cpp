@@ -39,3 +39,22 @@ void fui::transform2D::changeSize(glm::vec2 offsetInPix) {
 		size = glm::vec2(size.x, sizeInPix.y);
 	calculateBoredr();
 }
+
+glm::vec2 fui::transform2D::changeSizeAndGetMultiplier(glm::vec2 offsetInPix) {
+	glm::vec2 multiplier = glm::vec2(1.0);
+	glm::vec2 sizeInPix = getSizeInPixels();
+	sizeInPix += offsetInPix;
+	sizeInPix = glm::vec2(sizeInPix.x / (double)fui::scene::width, sizeInPix.y / (double)fui::scene::height);
+	if (sizeInPix.x > 0.005)
+		size = glm::vec2(sizeInPix.x, size.y);
+	else
+		multiplier = glm::vec2(0.0, multiplier.y);
+
+	if (sizeInPix.y > 0.005)
+		size = glm::vec2(size.x, sizeInPix.y);
+	else
+		multiplier = glm::vec2(multiplier.x, 0.0);
+
+	calculateBoredr();
+	return multiplier;
+}

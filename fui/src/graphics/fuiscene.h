@@ -32,6 +32,19 @@ namespace fui {
 		static glm::vec2 getMousePosInPixels();
 
 		static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+
+		static double getDX();
+		static double getDY();
+		static bool mouseButton(int button);
+		static bool mouseButtonWentUp(int button);
+		static bool mouseButtonWentDown(int button);
+	private:
+		void rememberMouseInputs();
+
+		static double mouseDX, mouseDY;
+		static bool mouseButtons[];
+		static bool mouseButtonsWentUp[];
+		static bool mouseButtonsWentDown[];
 	};
 }
 #endif // !FUISCENE_H

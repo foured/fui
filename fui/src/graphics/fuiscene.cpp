@@ -3,6 +3,13 @@
 unsigned int fui::scene::width = 0;
 unsigned int fui::scene::height = 0;
 
+double fui::scene::mouseDX = 0;
+double fui::scene::mouseDY = 0;
+
+bool fui::scene::mouseButtons[GLFW_MOUSE_BUTTON_LAST] = { 0 };
+bool fui::scene::mouseButtonsWentUp[GLFW_MOUSE_BUTTON_LAST] = { 0 };
+bool fui::scene::mouseButtonsWentDown[GLFW_MOUSE_BUTTON_LAST] = { 0 };
+
 void fui::scene::framebufferSizeCallback(GLFWwindow* widnow, int width, int height) {
     glViewport(0, 0, width, height);
     // update variables
@@ -63,6 +70,8 @@ bool fui::scene::shouldClose() {
 void fui::scene::update() {
     glClearColor(windowColor[0], windowColor[1], windowColor[2], windowColor[3]);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    rememberMouseInputs();
 }
 
 void fui::scene::newFrame() {
@@ -97,4 +106,35 @@ glm::vec2 fui::scene::getMousePosInNDC() {
 glm::vec2 fui::scene::getMousePosInPixels() {
     glm::vec2 res = glm::vec2(Mouse::getMouseX(), 800.0 - Mouse::getMouseY());
     return res;
+}
+
+void fui::scene::rememberMouseInputs() {
+    mouseDX = Mouse::getDX();
+    mouseDY = Mouse::getDY();
+
+    for (int i = 0; i < GLFW_MOUSE_BUTTON_LAST; i++) {
+        mouseButtons[i] = Mouse::button(i);
+        mouseButtonsWentUp[i] = Mouse::buttonWentUp(i);
+        mouseButtonsWentDown[i] = Mouse::buttonWentDown(i);
+    }
+}
+
+double fui::scene::getDX() {
+    return mouseDX;
+}
+
+double fui::scene::getDY() {
+    return mouseDY;
+}
+
+bool fui::scene::mouseButton(int button) {
+    return mouseButtons[button];
+}
+
+bool fui::scene::mouseButtonWentUp(int button) {
+    return mouseButtonsWentUp[button];
+}
+
+bool fui::scene::mouseButtonWentDown(int button) {
+    return mouseButtonsWentDown[button];
 }

@@ -2,7 +2,6 @@
 
 fui::model2D::model2D(std::string id)
 	: id(id), currentId("aaaaaaaa") {
-	
 }
 
 std::string fui::model2D::generateId() {
@@ -19,40 +18,32 @@ std::string fui::model2D::generateId() {
 	return currentId;
 }
 
-void fui::model2D::addToShadersQueue(Shader shader, int instanceIdx) {
-	for (int i = 0, s = shadersQueue.size(); i < s; i++) {
-		if (shadersQueue[i].first.id == shader.id) {
-			shadersQueue[i].second.push_back(instanceIdx);
-			return;
-		}
-	}
-
-	shadersQueue.push_back(std::pair<Shader, std::vector<int>>(shader, std::vector<int>{instanceIdx}));
+void fui::model2D::addToOutlineShaderQueue(int instanceIdx, glm::vec3 color) {
+	std::pair<int, glm::vec3>a;
+	a.first = instanceIdx;
+	a.second = color;
+	outlineShaderQueue.push_back(a);
 }
 
-void fui::model2D::renderShadersQueue() {
-	for (int i = 0, s = shadersQueue.size(); i < s; i++) {
-		Shader shader = shadersQueue[i].first;
-		std::vector<int> idxs = shadersQueue[i].second;
-
-		shader.activate();
-		std::vector<glm::vec3> positions, sizes;
-		for (unsigned int i = 0, size = idxs.size(); i < size; i++) {
-			positions.push_back(glm::vec3(instances[idxs[i]]->position, 0.0));
-			sizes.push_back(glm::vec3(instances[idxs[i]]->size, 1.0));
-		}
-
-		posVBO.bind();
-		posVBO.updateData<glm::vec3>(0, positions.size(), &positions[0]);
-
-		sizeVBO.bind();
-		sizeVBO.updateData<glm::vec3>(0, sizes.size(), &sizes[0]);
-
-		for (int i = 0, len = meshes.size(); i < len; i++) {
-			meshes[i].render(sizes.size(), shader);
-		}
+void fui::model2D::renderOutlineShaderQueue(Shader outlineShader) {
+	outlineShader.activate();
+	std::vector<glm::vec3> positions = { glm::vec3(0) }, sizes = { glm::vec3(0) };
+	for (int i = 0, s = outlineShaderQueue.size(); i < s; i++) {
+		renderInstance(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
+		/*positions.push_back(glm::vec3(instances[outlineShaderQueue[i].first]->position, 0.0));
+		sizes.push_back(glm::vec3(instances[outlineShaderQueue[i].first]->size, 1.0));
+		std::cout << sizes[i].x << " " << sizes[i].y << std::endl;*/
 	}
-	shadersQueue.clear();
+	//posVBO.bind();
+	//posVBO.updateData<glm::vec3>(0, sizes.size(), &positions[0]);
+
+	//sizeVBO.bind();
+	//sizeVBO.updateData<glm::vec3>(0, sizes.size(), &sizes[0]);
+
+	//for (int i = 0, len = meshes.size(); i < len; i++) {
+	//	meshes[i].render(sizes.size(), outlineShader);
+	//}
+	outlineShaderQueue.clear();
 }
 
 void fui::model2D::renderInstances(Shader shader) {
@@ -74,6 +65,28 @@ void fui::model2D::renderInstances(Shader shader) {
 	}
 }
 
+void fui::model2D::renderInstance(Shader shader, transform2D* transform, glm::vec3 color) {
+	shader.activate();
+
+	if (color != glm::vec3(-1.0)) {
+		shader.set3Float("oColor", color);
+	}
+
+	std::vector<glm::vec3> positions, sizes;
+
+	positions.push_back(glm::vec3(transform->position, 0.0));
+	sizes.push_back(glm::vec3(transform->size, 1.0));
+
+	posVBO.bind();
+	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
+
+	sizeVBO.bind();
+	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
+
+	for (int i = 0, len = meshes.size(); i < len; i++) {
+		meshes[i].render(instances.size(), shader);
+	}
+}
 void fui::model2D::calcRectBorder2D() {
 	for (int i = 0, len = meshes.size(); i < len; i++) {
 		for (int j = 0, len1 = meshes[i].vertices.size(); j < len1; j++) {

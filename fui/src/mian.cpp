@@ -19,8 +19,8 @@ fui::scene scene;
 rect r;
 
 Shader outlineShader;
-
 void processInput();
+
 int main() {
     scene.init();
 
@@ -28,8 +28,11 @@ int main() {
     outlineShader = Shader("assets/shaders/outline.vs", "assets/shaders/outline.fs");
 
     r.init();
-    r.generateInstance(glm::vec2(0.0), glm::vec2(1));
+    r.generateInstance(glm::vec2(0.25, 0.0), glm::vec2(0.5));
+    r.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.5));
     r.initInstances();
+
+    std::cout << std::endl;
 
     while (!scene.shouldClose())
     {
@@ -37,7 +40,7 @@ int main() {
 
         processInput();
         
-        r.renderShadersQueue();
+        r.renderOutlineShaderQueue(outlineShader);
         r.renderInstances(shader);
 
         scene.newFrame();

@@ -20,15 +20,16 @@ namespace fui {
 
 		std::vector<transform2D*> instances;
 
-		std::vector<std::pair<Shader, std::vector<int>>> shadersQueue;
+		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
 
 		model2D(std::string id);
 
-		void addToShadersQueue(Shader shader, int instanceIdx);
-		void renderShadersQueue();
+		void addToOutlineShaderQueue(int instanceIdx, glm::vec3 color);
+		void renderOutlineShaderQueue(Shader outlineShader);
 
 		void init();
 		void renderInstances(Shader shader);
+		void renderInstance(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();

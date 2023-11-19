@@ -34,6 +34,7 @@ namespace fui {
 		void setPositionInPixels(glm::vec2 posInPix);
 		void addPositionInPixels(glm::vec2 offsetInPix);
 		void changeSize(glm::vec2 offsetInPix);
+		glm::vec2 changeSizeAndGetMultiplier(glm::vec2 offsetInPix);
 
 	private:
 		rectBorder2D* modelBoreder;
