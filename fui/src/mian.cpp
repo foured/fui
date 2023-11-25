@@ -32,16 +32,15 @@ int main() {
     r.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.5));
     r.initInstances();
 
-    std::cout << std::endl;
-
     while (!scene.shouldClose())
     {
         scene.update();
 
         processInput();
         
-        r.renderOutlineShaderQueue(outlineShader);
+        //r.prepareOutlineShader(outlineShader);
         r.renderInstances(shader);
+        r.renderOutlineShaderQueue(outlineShader);
 
         scene.newFrame();
     }
@@ -54,6 +53,6 @@ void processInput() {
     scene.processInput();
 
     for (int i = 0; i < r.instances.size(); i++) {
-        r.instances[i]->interactivity.update(outlineShader);
+        r.instances[i]->interactivity.update();
     }
 }

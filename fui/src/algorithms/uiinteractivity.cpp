@@ -13,27 +13,35 @@ fui::uiinteractivity::uiinteractivity(transform2D* transform)
     isResizing = false;
 }
 
-void fui::uiinteractivity::update(Shader outlineShader) {
+void fui::uiinteractivity::update() {
 
     float x = scene::getDX();
     float y = scene::getDY();
     glm::vec2 mousePos = scene::getMousePosInNDC();
-    if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos)) {
+    if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos) && instance->model->canBeSelected(instance)) {
+        instance->model->selectedInstanceId = instance->indstanceId;
+        instance->orderInLayer = 1;
+
         isSelected = true;
         isResizing = instance->border.isPointCloseToBorder(mousePos, distToOutline);
         calculateResize(mousePos);
     }
-    else if (instance->border.isPointCloseToBorder(mousePos, distToOutline)) {
+    else if (instance->border.isPointCloseToBorder(mousePos, distToOutline) && instance->model->canBeSelected(instance)) {
         instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.01, 0.42, 0.17));
+        //instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(1, 0, 0));
     }
     if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
+        if (instance->model->selectedInstanceId == instance->indstanceId) {
+            //instance->model->selectedInstanceId = "";
+            instance->orderInLayer = 0;
+        }
         isSelected = false;
         isResizing = false;
     }
     
 
     drag(x, y);
-    resize(outlineShader, x, y, mousePos);
+    resize(x, y, mousePos);
 }
 
 void fui::uiinteractivity::drag(float mouseDX, float mouseDY) {
@@ -42,7 +50,7 @@ void fui::uiinteractivity::drag(float mouseDX, float mouseDY) {
 	}
 }
 
-void fui::uiinteractivity::resize(Shader outlineShader, float mouseDX, float mouseDY, glm::vec2 mousePos) {
+void fui::uiinteractivity::resize(float mouseDX, float mouseDY, glm::vec2 mousePos) {
     if (isResizeable && isSelected) {
         if (isResizing) {
             instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.0, 0.8, 0.1));

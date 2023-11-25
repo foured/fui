@@ -1,7 +1,7 @@
 #include "transform2d.h"
 
 fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder, std::string instanceId)
-	: position(pos), size(size), rotation(rotation), model(model), modelBoreder(modelBoreder), indstanceId(instanceId) {
+	: position(pos), size(size), rotation(rotation), model(model), modelBoreder(modelBoreder), indstanceId(instanceId), orderInLayer(0) {
 	calculateBoredr();
 	interactivity = uiinteractivity(this);
 }

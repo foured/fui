@@ -20,6 +20,8 @@ namespace fui {
 		glm::vec2 size;
 		glm::vec3 rotation;
 
+		int orderInLayer;
+
 		rectBorder2D border;
 		uiinteractivity interactivity;
 

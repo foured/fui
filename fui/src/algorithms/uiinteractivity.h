@@ -22,9 +22,9 @@ namespace fui {
 
 		double distToOutline;
 
-		void update(Shader outlineShader);
+		void update();
 		void drag(float mouseDX, float mouseDY);
-		void resize(Shader outlineShader, float mouseDX, float mouseDY, glm::vec2 mousePos);
+		void resize(float mouseDX, float mouseDY, glm::vec2 mousePos);
 
 	private:
 		bool isResizing;

@@ -1,7 +1,7 @@
 #include "model2d.h"
 
 fui::model2D::model2D(std::string id)
-	: id(id), currentId("aaaaaaaa") {
+	: id(id), currentId("aaaaaaaa"), selectedInstanceId("") {
 }
 
 std::string fui::model2D::generateId() {
@@ -26,28 +26,21 @@ void fui::model2D::addToOutlineShaderQueue(int instanceIdx, glm::vec3 color) {
 }
 
 void fui::model2D::renderOutlineShaderQueue(Shader outlineShader) {
-	outlineShader.activate();
-	std::vector<glm::vec3> positions = { glm::vec3(0) }, sizes = { glm::vec3(0) };
 	for (int i = 0, s = outlineShaderQueue.size(); i < s; i++) {
-		renderInstance(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
-		/*positions.push_back(glm::vec3(instances[outlineShaderQueue[i].first]->position, 0.0));
-		sizes.push_back(glm::vec3(instances[outlineShaderQueue[i].first]->size, 1.0));
-		std::cout << sizes[i].x << " " << sizes[i].y << std::endl;*/
+		transform2D* instance = instances[outlineShaderQueue[i].first];
+		modelOutline.renderInstance(outlineShader, instance->position, instance->size, outlineShaderQueue[i].second);
 	}
-	//posVBO.bind();
-	//posVBO.updateData<glm::vec3>(0, sizes.size(), &positions[0]);
-
-	//sizeVBO.bind();
-	//sizeVBO.updateData<glm::vec3>(0, sizes.size(), &sizes[0]);
-
-	//for (int i = 0, len = meshes.size(); i < len; i++) {
-	//	meshes[i].render(sizes.size(), outlineShader);
-	//}
 	outlineShaderQueue.clear();
+}
+
+void fui::model2D::prepareOutlineShader(Shader shader) {
+	outlineShader = shader;
+	outlineShader.activate();
 }
 
 void fui::model2D::renderInstances(Shader shader) {
 	shader.activate();
+	sortInstancesByLayer();
 	std::vector<glm::vec3> positions, sizes;
 	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
 		positions.push_back(glm::vec3(instances[i]->position, 0.0));
@@ -147,6 +140,32 @@ unsigned int fui::model2D::getInstaneIdxById(std::string id) {
 		if (instances[i]->indstanceId == id) return i;
 	}
 	return -1;
+}
+
+void fui::model2D::sortInstancesByLayer() {
+	for (unsigned int i = 1; i < instances.size(); i++) {
+		for (unsigned int j = 0; j < instances.size() - i; j++) {
+			if (instances[j]->orderInLayer > instances[j + 1]->orderInLayer) {
+				transform2D* temp = instances[j];
+				instances[j] = instances[j + 1];
+				instances[j + 1] = temp;
+			}
+		}
+	}
+}
+
+bool fui::model2D::canBeSelected(transform2D* instance) {
+	std::string ciid = instance->indstanceId;
+
+	if (ciid == selectedInstanceId || selectedInstanceId == "") {
+		return true;
+	}
+	else {
+		bool can;
+		can = !instances[getInstaneIdxById(selectedInstanceId)]->border.isDotInRect(scene::getMousePosInNDC());
+		//bool can = !instance->border.isRectInRect(instances[getInstaneIdxById(selectedInstanceId)]->border);
+		return can;
+	}
 }
 
 void fui::model2D::init(){}

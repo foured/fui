@@ -23,7 +23,6 @@ std::vector<fui::vertex> fui::vertex::generateVertices(std::vector<float> vertic
 			verticesData[datai + 4]
 		};
 	}
-
 	return vertices;
 }
 

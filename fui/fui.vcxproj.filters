@@ -54,6 +54,9 @@
     <ClCompile Include="src\algorithms\uiinteractivity.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\outline.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
@@ -99,9 +102,15 @@
     <ClInclude Include="src\algorithms\uiinteractivity.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\outline.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\textures\alice.jpg">
+    <Image Include="assets\textures\jason.jpg">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="assets\textures\shrek.jpg">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
