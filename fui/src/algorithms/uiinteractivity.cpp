@@ -25,14 +25,14 @@ void fui::uiinteractivity::update() {
         isSelected = true;
         isResizing = instance->border.isPointCloseToBorder(mousePos, distToOutline);
         calculateResize(mousePos);
+
+        click();
     }
     else if (instance->border.isPointCloseToBorder(mousePos, distToOutline) && instance->model->canBeSelected(instance)) {
         instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.01, 0.42, 0.17));
-        //instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(1, 0, 0));
     }
     if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
         if (instance->model->selectedInstanceId == instance->indstanceId) {
-            //instance->model->selectedInstanceId = "";
             instance->orderInLayer = 0;
         }
         isSelected = false;
@@ -59,9 +59,27 @@ void fui::uiinteractivity::resize(float mouseDX, float mouseDY, glm::vec2 mouseP
         }
     }
 }
+
+void fui::uiinteractivity::click() {
+    for (auto& fn : funcsOnClick_none) {
+        fn();
+    }
+    for (auto& fn : funcsOnClick_int) {
+        fn.first(fn.second);
+    }
+}
+
 void fui::uiinteractivity::calculateResize(glm::vec2 mousePos) {
     yk = 1, xk = 1;
     if (mousePos.x < instance->position.x) xk = -1;
     if (mousePos.y < instance->position.y) yk = -1;
     quaterK = instance->border.getQuatersOfBorderContactWithPoint(mousePos, distToOutline);
+}
+
+void fui::uiinteractivity::addFunctionOnClick(std::function<void(int)> func, int arg) {
+    funcsOnClick_int.emplace_back(func, arg);
+}
+
+void fui::uiinteractivity::addFunctionOnClick(std::function<void()> func) {
+    funcsOnClick_none.push_back(func);
 }

@@ -10,6 +10,7 @@
 
 #include "../algorithms/rectboreder2d.h"
 #include "../algorithms/transform2d.h"
+#include "../algorithms/fuifunctions.h"
 
 namespace fui {
 	class transform2D;
@@ -31,7 +32,7 @@ namespace fui {
 		void prepareOutlineShader(Shader shader);
 
 		void init();
-		void renderInstances(Shader shader);
+		void renderInstances(Shader shader, Shader outlineShader);
 		void renderInstance(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));

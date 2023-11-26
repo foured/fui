@@ -29,6 +29,7 @@ int fui::scene::init() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE);
 
     window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window == NULL)
@@ -38,6 +39,7 @@ int fui::scene::init() {
         return -1;
     }
     glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -58,6 +60,9 @@ int fui::scene::init() {
     // mouse scroll
     glfwSetScrollCallback(window, Mouse::mouseWheelCallback);
 
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
     std::cout << "Program started." << std::endl;
 
     return 0;
@@ -69,7 +74,7 @@ bool fui::scene::shouldClose() {
 
 void fui::scene::update() {
     glClearColor(windowColor[0], windowColor[1], windowColor[2], windowColor[3]);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     rememberMouseInputs();
 }

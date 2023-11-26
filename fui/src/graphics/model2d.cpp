@@ -38,24 +38,55 @@ void fui::model2D::prepareOutlineShader(Shader shader) {
 	outlineShader.activate();
 }
 
-void fui::model2D::renderInstances(Shader shader) {
+void fui::model2D::renderInstances(Shader shader, Shader outlineShader) {
 	shader.activate();
 	sortInstancesByLayer();
-	std::vector<glm::vec3> positions, sizes;
+	std::vector<glm::vec3> positions, sizes, oPositions, oSizes;
 	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
-		positions.push_back(glm::vec3(instances[i]->position, 0.0));
-		sizes.push_back(glm::vec3(instances[i]->size, 1.0));
+		bool hasOutline = false;
+		for (int j = 0, s = outlineShaderQueue.size(); j < s; j++) {
+			if (i == outlineShaderQueue[j].first) {
+				hasOutline = true;
+				break;
+			}
+		}
+		if (!hasOutline) {
+			positions.push_back(glm::vec3(instances[i]->position, 0.0));
+			sizes.push_back(glm::vec3(instances[i]->size, 1.0));
+		}
+		else {
+			oPositions.push_back(glm::vec3(instances[i]->position, 0.0));
+			oSizes.push_back(glm::vec3(instances[i]->size, 1.0));
+		}
 	}
 
-	posVBO.bind();
-	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
+	if (positions.size() > 0) {
+		posVBO.bind();
+		posVBO.updateData<glm::vec3>(0, positions.size(), &positions[0]);
 
-	sizeVBO.bind();
-	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
+		sizeVBO.bind();
+		sizeVBO.updateData<glm::vec3>(0, positions.size(), &sizes[0]);
 
-	for (int i = 0, len = meshes.size(); i < len; i++) {
-		meshes[i].render(instances.size(), shader);
+		for (int i = 0, len = meshes.size(); i < len; i++) {
+			meshes[i].render(positions.size(), shader);
+		}
 	}
+	for (int i = 0, s = oSizes.size(); i < s; i++) {
+		renderInstance(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
+	}
+	shader.activate();
+	if (oPositions.size() > 0) {
+		posVBO.bind();
+		posVBO.updateData<glm::vec3>(0, oPositions.size(), &oPositions[0]);
+
+		sizeVBO.bind();
+		sizeVBO.updateData<glm::vec3>(0, oPositions.size(), &oSizes[0]);
+
+		for (int i = 0, len = meshes.size(); i < len; i++) {
+			meshes[i].render(oPositions.size(), shader);
+		}
+	}
+	outlineShaderQueue.clear();
 }
 
 void fui::model2D::renderInstance(Shader shader, transform2D* transform, glm::vec3 color) {

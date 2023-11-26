@@ -1,6 +1,6 @@
 #include <iostream>
-
 #include <vector>
+#include <string>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -21,6 +21,8 @@ rect r;
 Shader outlineShader;
 void processInput();
 
+void printOne(int q);
+
 int main() {
     scene.init();
 
@@ -32,21 +34,41 @@ int main() {
     r.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.5));
     r.initInstances();
 
+    double startTime, endTime;
+    std::string fpsmsg;
     while (!scene.shouldClose())
     {
+        startTime = glfwGetTime();
+
         scene.update();
 
         processInput();
-        
-        //r.prepareOutlineShader(outlineShader);
-        r.renderInstances(shader);
-        r.renderOutlineShaderQueue(outlineShader);
+
+        //glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        //glStencilMask(0xFF);
+        r.renderInstances(shader, outlineShader);
+        //glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        //glStencilMask(0x00);
+        //outlineShader.activate();
+        //r.renderInstances(shader);
+        //glStencilMask(0xFF);
+        //glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        //r.renderOutlineShaderQueue(outlineShader);
 
         scene.newFrame();
+
+        endTime = glfwGetTime();
+        std::cout << std::string(fpsmsg.length(), '\b');
+        fpsmsg = "frame start: " + std::to_string(startTime) + " frame end: " + std::to_string(endTime) + "fps: " + std::to_string(1.0 / (endTime - startTime));
+        std::cout << fpsmsg;
     }
 
     scene.terminate();
 	return 0;
+}
+
+void printOne(int q) {
+    std::cout << sizeof(int) << std::endl;
 }
 
 void processInput() {

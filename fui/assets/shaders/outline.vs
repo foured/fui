@@ -8,7 +8,8 @@ out vec2 texCoord;
 
 void main()
 {    
-    vec3 pos = aPos * aSize + aOffset;
+    vec3 pos = aPos * (aSize + vec3(0.01))+ aOffset;
+    //vec3 pos = vec3(aPos.x * aSize.x + aOffset.x, aPos.y + aOffset.y, aPos.x + aOffset.z);
     vec3 FragPos = vec3(mat4(1.0) * vec4(pos, 1.0));
     gl_Position = vec4(FragPos, 1.0);
 

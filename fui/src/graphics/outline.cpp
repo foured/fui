@@ -28,7 +28,6 @@ void fui::outline::initOutline(std::vector<mesh2D> nMeshes)  {
 	}
 }
 void fui::outline::renderInstance(Shader shader, glm::vec2 position, glm::vec2 size, glm::vec3 color) {
-	shader.activate();
 	shader.set3Float("oColor", color);
 	std::vector<glm::vec3> positions, sizes;
 
