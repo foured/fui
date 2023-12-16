@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GLFW\glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,6 +153,7 @@
     <ClCompile Include="src\graphics\model2d.cpp" />
     <ClCompile Include="src\graphics\outline.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
+    <ClCompile Include="src\graphics\text.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\io\keyboard.cpp" />
     <ClCompile Include="src\io\mouse.cpp" />
@@ -161,6 +162,8 @@
   <ItemGroup>
     <None Include="assets\shaders\outline.fs" />
     <None Include="assets\shaders\outline.vs" />
+    <None Include="assets\shaders\text.fs" />
+    <None Include="assets\shaders\text.vs" />
     <None Include="glfw3.dll" />
     <None Include="assets\shaders\object.fs" />
     <None Include="assets\shaders\object.vs" />
@@ -176,6 +179,7 @@
     <ClInclude Include="src\graphics\models\rect.hpp" />
     <ClInclude Include="src\graphics\outline.h" />
     <ClInclude Include="src\graphics\shader.h" />
+    <ClInclude Include="src\graphics\text.h" />
     <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\vertexmemory.hpp" />
     <ClInclude Include="src\io\keyboard.h" />
@@ -184,6 +188,13 @@
   <ItemGroup>
     <Image Include="assets\textures\jason.jpg" />
     <Image Include="assets\textures\shrek.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\comic.ttf" />
+    <Font Include="assets\fonts\comicbd.ttf" />
+    <Font Include="assets\fonts\comici.ttf" />
+    <Font Include="assets\fonts\comicz.ttf" />
+    <Font Include="assets\fonts\courer.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,6 +36,7 @@ namespace fui {
 
 		void setup(std::vector<vertex> _vertices, std::vector<unsigned int> _indices);
 		void render(unsigned int noInstances, Shader shader, GLuint renderType = GL_FILL);
+		void cleanup();
 	};
 	
 }

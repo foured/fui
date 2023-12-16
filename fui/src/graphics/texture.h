@@ -15,6 +15,9 @@ namespace fui{
 
 		texture();
 		texture(std::string path);
+
+		void bind();
+		void cleanup();
 	};
 }
 

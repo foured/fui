@@ -10,18 +10,24 @@
 #include "../io/keyboard.h"
 #include "../io/mouse.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include "../graphics/text.h"
+#include "model2d.h"
+
 namespace fui {
 	class scene {
 	public:
-		GLFWwindow* window;
-		const char* title;
 		static unsigned int width, height;
-		glm::vec4 windowColor;
+		FT_Library ft;
+		TextRenderer textRenderer;
+		std::vector<model2D*> models;
 
 		scene(int width = 800, int height = 800, const char* title = "Hello OpenGL!", glm::vec4 color = glm::vec4(0.41, 0.62, 0.69, 1.0));
 
 		void processInput();
 		int init();
+		void registerModel(model2D* model);
 		void update();
 		void newFrame();
 		bool shouldClose();
@@ -38,7 +44,12 @@ namespace fui {
 		static bool mouseButton(int button);
 		static bool mouseButtonWentUp(int button);
 		static bool mouseButtonWentDown(int button);
+
 	private:
+		GLFWwindow* window;
+		const char* title;
+		glm::vec4 windowColor;
+
 		void rememberMouseInputs();
 
 		static double mouseDX, mouseDY;

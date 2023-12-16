@@ -31,3 +31,11 @@ fui::texture::texture(std::string path) {
 
 	stbi_image_free(data);
 }
+
+void fui::texture::bind() {
+	glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void fui::texture::cleanup() {
+	glDeleteTextures(1, &id);
+}

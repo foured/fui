@@ -38,6 +38,7 @@ int fui::scene::init() {
         glfwTerminate();
         return -1;
     }
+    std::cout << "GLFW window was created." << std::endl;
     glfwMakeContextCurrent(window);
     //glfwSwapInterval(0);
 
@@ -46,6 +47,7 @@ int fui::scene::init() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+    std::cout << "GLAD was initialized." << std::endl;
 
     glViewport(0, 0, width, height);
 
@@ -62,8 +64,23 @@ int fui::scene::init() {
 
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    std::cout << "Program started." << std::endl;
+    if (FT_Init_FreeType(&ft)) {
+        std::cout << "Could not init FreeType library" << std::endl;
+        return false;
+    }
+    std::cout << "FreeType was loaded." << std::endl;
+    textRenderer = TextRenderer(20);
+    if (!textRenderer.loadFont(ft, "assets/fonts/courer.ttf")) {
+        std::cout << "Could not load font" << std::endl;
+        return false;
+    }
+    std::cout << "Text renderer created." << std::endl;
+    FT_Done_FreeType(ft);
+
+    std::cout << "Program started.\n" << std::endl;
 
     return 0;
 }
@@ -71,12 +88,22 @@ int fui::scene::init() {
 bool fui::scene::shouldClose() {
     return glfwWindowShouldClose(window);
 }
+void fui::scene::registerModel(model2D* model) {
+    models.push_back(model);
+}
 
 void fui::scene::update() {
     glClearColor(windowColor[0], windowColor[1], windowColor[2], windowColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     rememberMouseInputs();
+
+    //processInput();
+    //for (model2D* model : models) {
+    //    for (transform2D* instance : model->instances) {
+    //        instance->interactivity.update();
+    //    }
+    //}
 }
 
 void fui::scene::newFrame() {

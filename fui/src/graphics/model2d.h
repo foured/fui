@@ -38,6 +38,7 @@ namespace fui {
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();
 		void sortInstancesByLayer();
+		void cleanup();
 
 		rectBorder2D getInstanseBorder(unsigned int instanceIdx);
 		unsigned int getInstaneIdxById(std::string id);

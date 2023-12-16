@@ -199,4 +199,10 @@ bool fui::model2D::canBeSelected(transform2D* instance) {
 	}
 }
 
+void fui::model2D::cleanup() {
+	for (mesh2D m : meshes) {
+		m.cleanup();
+	}
+}
+
 void fui::model2D::init(){}

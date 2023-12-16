@@ -57,6 +57,7 @@ void fui::mesh2D::render(unsigned int noInstances, Shader shader, GLuint renderT
 	if (hasTexture) {
 		glActiveTexture(GL_TEXTURE0);
 		shader.setInt("hasTexture", 1);
+		meshTexture.bind();
 	}
 	else {
 		shader.setInt("hasTexture", 0);
@@ -68,4 +69,10 @@ void fui::mesh2D::render(unsigned int noInstances, Shader shader, GLuint renderT
 	ArrayObject::clear();
 
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void fui::mesh2D::cleanup() {
+	VAO.cleanup();
+
+	meshTexture.cleanup();
 }

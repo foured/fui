@@ -60,6 +60,9 @@
     <ClCompile Include="src\algorithms\fuifunctions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\text.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
@@ -67,6 +70,8 @@
     <None Include="assets\shaders\object.fs" />
     <None Include="assets\shaders\outline.fs" />
     <None Include="assets\shaders\outline.vs" />
+    <None Include="assets\shaders\text.vs" />
+    <None Include="assets\shaders\text.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\fuiscene.h">
@@ -111,6 +116,9 @@
     <ClInclude Include="src\algorithms\fuifunctions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\text.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\textures\jason.jpg">
@@ -119,5 +127,12 @@
     <Image Include="assets\textures\shrek.jpg">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\comic.ttf" />
+    <Font Include="assets\fonts\comicbd.ttf" />
+    <Font Include="assets\fonts\comici.ttf" />
+    <Font Include="assets\fonts\comicz.ttf" />
+    <Font Include="assets\fonts\courer.ttf" />
   </ItemGroup>
 </Project>
