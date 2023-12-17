@@ -29,13 +29,23 @@ bool fui::rectBorder2D::isPointCloseToBorder(glm::vec2 point, double distToBorde
 
 	return res;
 }
+bool fui::rectBorder2D::isPointCloseToBorderOutside(glm::vec2 point, double distToBorder) {
+	bool res = false;
+
+	res = res || rectBorder2D(glm::vec2(min.x, min.y - distToBorder), glm::vec2(max.x, min.y)).isDotInRect(point); // down
+	res = res || rectBorder2D(glm::vec2(min.x, max.y), glm::vec2(max.x, max.y + distToBorder)).isDotInRect(point); // top
+	res = res || rectBorder2D(glm::vec2(min.x - distToBorder, min.y), glm::vec2(min.x, max.y)).isDotInRect(point); // left
+	res = res || rectBorder2D(glm::vec2(max.x, min.y), glm::vec2(max.x + distToBorder, max.y)).isDotInRect(point); // right
+
+	return res;
+}
 glm::vec2 fui::rectBorder2D::getCoordOfContactBorder(glm::vec2 point, double distToBorder) {
 	glm::vec2 res = glm::vec2(0.0);
 
-	if (rectBorder2D(min, glm::vec2(max.x, min.y + distToBorder)).isDotInRect(point)) res = glm::vec2((max.x - min.x) / 2, min.y); // down
-	if (rectBorder2D(glm::vec2(min.x, max.y - distToBorder), max).isDotInRect(point)) res = glm::vec2((max.x - min.x) / 2, max.y);  // top
-	if (rectBorder2D(min, glm::vec2(min.x + distToBorder, max.y)).isDotInRect(point)) res = glm::vec2(min.x, (max.y - min.y) / 2); // left
-	if (rectBorder2D(glm::vec2(max.x - distToBorder, min.y), max).isDotInRect(point)) res = glm::vec2(max.x, (max.y - min.y) / 2);  // right
+	if (rectBorder2D(min, glm::vec2(max.x, min.y + distToBorder)).isDotInRect(point)) res = glm::vec2(origin.x, min.y); // down
+	if (rectBorder2D(glm::vec2(min.x, max.y - distToBorder), max).isDotInRect(point)) res = glm::vec2(origin.x, max.y);  // top
+	if (rectBorder2D(min, glm::vec2(min.x + distToBorder, max.y)).isDotInRect(point)) res = glm::vec2(min.x, origin.y); // left
+	if (rectBorder2D(glm::vec2(max.x - distToBorder, min.y), max).isDotInRect(point)) res = glm::vec2(max.x, origin.y);  // right
 
 	return res;
 }

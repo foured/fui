@@ -1,13 +1,47 @@
 #include "selectedItemManager.h"
 #include "../graphics/fuiscene.h"
 
-fui::selectedItemManager::selectedItemManager(){ 
+fui::selectedItemAction::selectedItemAction(selectedItemManager* SIM) : type(selectedItemAction_type::FREE), isInAction(false), sim(SIM) {}
+
+bool fui::selectedItemAction::getIsInAction() {
+	return isInAction;
+}
+void fui::selectedItemAction::setAction(fui::selectedItemAction_type actionType, fui::uiinteractivity* interactivity) {
+	isInAction = true;
+	type = actionType;
+	haveWP = false;
+	actionObject = interactivity;
+}
+void fui::selectedItemAction::offAction() {
+	isInAction = false;
+	if (haveWP && wpSender->instance->border.isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline)
+		&& sim->canBeSelected(wpSender->instance)) {
+		
+		if (type == selectedItemAction_type::RESIZING)
+			actionObject->setResizeWishPos(wishPos);
+	}
+	haveWP = false;
+}
+fui::uiinteractivity* fui::selectedItemAction::getWPSender() {
+	return wpSender;
+}
+fui::uiinteractivity* fui::selectedItemAction::getActionObject() {
+	return actionObject;
+}
+void fui::selectedItemAction::sendWishPos(glm::vec2 wp, fui::uiinteractivity* sender) {
+	wishPos = wp;
+	haveWP = true;
+	wpSender = sender;
+	sim->markerPositions.push_back(wp);
+}
+
+fui::selectedItemManager::selectedItemManager() : action{this} {
 	selectedItem = nullptr;
 	isResizing = false;
 	haveWP = false;
 	wpSender = nullptr;
-}
 
+}
 bool fui::selectedItemManager::canBeSelected(transform2D* instance) {
 	if (selectedItem == nullptr) return true;
 
@@ -25,13 +59,10 @@ void fui::selectedItemManager::setResizing(uiinteractivity* interactivity) {
 }
 void fui::selectedItemManager::offResizing() {
 	isResizing = false;
-	if (haveWP && wpSender->instance->border.isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->distToOutline) 
+	if (haveWP && wpSender->instance->border.isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline) 
 		&& canBeSelected(wpSender->instance)) {
 		resizedObject->setResizeWishPos(wishPos);
 	}
-	haveWP = false;
-}
-void fui::selectedItemManager::clearWishPos() {
 	haveWP = false;
 }
 bool fui::selectedItemManager::getResizing() {
@@ -47,6 +78,7 @@ void fui::selectedItemManager::sendWishPos(glm::vec2 wp, uiinteractivity* sender
 	wishPos = wp;
 	haveWP = true;
 	wpSender = sender;
+	markerPositions.push_back(wp);
 }
 void fui::selectedItemManager::makeMeFirstInOutline(model2D* model) {
 	if (isVectorContainsValue(outlineQueue, model)) {

@@ -16,6 +16,7 @@ namespace fui {
 		bool isRectInRect(rectBorder2D rect);
 
 		bool isPointCloseToBorder(glm::vec2 point, double distToBorder = 0.02);
+		bool isPointCloseToBorderOutside(glm::vec2 point, double distToBorder = 0.02);
 		glm::vec2 getQuatersOfBorderContactWithPoint(glm::vec2 point, double distToBorder = 0.02);
 		glm::vec2 getCoordOfContactBorder(glm::vec2 point, double distToBorder = 0.02);
 		int getQuaterOfPoint(glm::vec2 point);

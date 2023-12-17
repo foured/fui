@@ -14,6 +14,7 @@
 #include FT_FREETYPE_H
 #include "../graphics/text.h"
 #include "model2d.h"
+#include "models/circle.hpp"
 
 namespace fui {
 	class scene {
@@ -28,6 +29,7 @@ namespace fui {
 		void processInput();
 		int init();
 		void registerModel(model2D* model);
+		void registerMarker(circle* marker);
 		void renderScene(Shader shader, Shader outlineShader, Shader textShader);
 		void update();
 		void newFrame();
@@ -62,6 +64,7 @@ namespace fui {
 		static bool mouseButtonsWentDown[];
 
 		selectedItemManager sim;
+		circle* marker;
 	};
 }
 #endif // !FUISCENE_H

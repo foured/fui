@@ -3,7 +3,8 @@
 
 
 fui::model2D::model2D(std::string id)
-	: id(id), currentId("aaaaaaaa") { //selectedInstanceId("")
+	: id(id), currentId("aaaaaaaa") { 
+	uiinteractivityConfig = uiinteractivity_config();
 }
 
 std::string fui::model2D::generateId() {
@@ -25,19 +26,6 @@ void fui::model2D::addToOutlineShaderQueue(int instanceIdx, glm::vec3 color) {
 	a.first = instanceIdx;
 	a.second = color;
 	outlineShaderQueue.push_back(a);
-}
-
-void fui::model2D::renderOutlineShaderQueue(Shader outlineShader) {
-	for (int i = 0, s = outlineShaderQueue.size(); i < s; i++) {
-		transform2D* instance = instances[outlineShaderQueue[i].first];
-		modelOutline.renderInstance(outlineShader, instance->position, instance->size, outlineShaderQueue[i].second);
-	}
-	outlineShaderQueue.clear();
-}
-
-void fui::model2D::prepareOutlineShader(Shader shader) {
-	outlineShader = shader;
-	outlineShader.activate();
 }
 
 void fui::model2D::renderInstances(Shader shader) {
@@ -132,16 +120,14 @@ void fui::model2D::calcRectBorder2D() {
 		}
 	}
 }
-
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId());
+	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), uiinteractivityConfig);
 	instance->interactivity.setSIM(sim);
 	instances.push_back(instance);
 }
 
 void fui::model2D::initInstances(){
 	std::vector<glm::vec3> positions, sizes;
-
 	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
 		positions.push_back(glm::vec3(instances[i]->position, 0.0));
 		sizes.push_back(glm::vec3(instances[i]->size, 1.0));
@@ -195,22 +181,15 @@ void fui::model2D::sortInstancesByLayer() {
 	}
 }
 
-//bool fui::model2D::canBeSelected(transform2D* instance) {
-//	std::string ciid = instance->indstanceId;
-//
-//	if (ciid == selectedInstanceId || selectedInstanceId == "") {
-//		return true;
-//	}
-//	else {
-//		bool can = !instances[getInstaneIdxById(selectedInstanceId)]->border.isDotInRect(scene::getMousePosInNDC());
-//		return can;
-//	}
-//}
-
 void fui::model2D::cleanup() {
 	for (mesh2D m : meshes) {
 		m.cleanup();
 	}
+}
+
+void fui::model2D::clearInstances() {
+	if(instances.size() > 0)
+		instances.clear();
 }
 
 void fui::model2D::init(){}

@@ -54,9 +54,6 @@
     <ClCompile Include="src\algorithms\uiinteractivity.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\outline.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\text.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -110,9 +107,6 @@
     <ClInclude Include="src\algorithms\uiinteractivity.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\outline.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="src\graphics\text.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -120,6 +114,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\algorithms\fuifunctions.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\models\circle.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

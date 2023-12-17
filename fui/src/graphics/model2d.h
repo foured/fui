@@ -6,7 +6,6 @@
 
 #include "mesh2d.h"
 #include "shader.h"
-#include "outline.h"
 
 #include "../algorithms/rectboreder2d.h"
 #include "../algorithms/transform2d.h"
@@ -21,19 +20,16 @@ namespace fui {
 	public:
 		std::vector<mesh2D> meshes;
 		std::string id;
-		outline modelOutline;
 
 		std::vector<transform2D*> instances;
 		selectedItemManager* sim;
+		uiinteractivity_config uiinteractivityConfig;
 		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
 
 		model2D(std::string id);
 
-		void addToOutlineShaderQueue(int instanceIdx, glm::vec3 color);
-		void renderOutlineShaderQueue(Shader outlineShader);
-		void prepareOutlineShader(Shader shader);
-
 		void init();
+		void addToOutlineShaderQueue(int instanceIdx, glm::vec3 color);
 		void renderInstances(Shader shader);
 		void renderOutlinedInstances(Shader shader, Shader outlineShader);
 		void renderInstance(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
@@ -41,6 +37,7 @@ namespace fui {
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();
 		void sortInstancesByLayer();
+		void clearInstances();
 		void cleanup();
 
 		rectBorder2D getInstanseBorder(unsigned int instanceIdx);
@@ -55,7 +52,6 @@ namespace fui {
 		std::string currentId;
 		std::string generateId();
 
-		Shader outlineShader;
 		std::vector<glm::vec3> oPositions, oSizes;
 	};
 }

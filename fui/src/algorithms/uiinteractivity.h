@@ -10,18 +10,35 @@
 namespace fui {
 	class transform2D;
 	class selectedItemManager;
+	class selectedItemAction;
+	enum selectedItemAction_type;
+
+	enum uiinteractivity_config_type : char {
+		ACTIVE_ALL,
+		DISABLE_ALL,
+		CUSTOM
+	};
+
+	class uiinteractivity_config {
+	public:
+		uiinteractivity_config(uiinteractivity_config_type type = uiinteractivity_config_type::ACTIVE_ALL);
+
+		bool isDraggable;
+		bool isResizeable;
+		bool haveOutline;
+
+		double distToOutline;
+	};
+
 	class uiinteractivity {
 	public:
 		transform2D *instance;
 
 		uiinteractivity();
-		uiinteractivity(transform2D* transform);
+		uiinteractivity(transform2D* transform, uiinteractivity_config config = uiinteractivity_config(uiinteractivity_config_type::ACTIVE_ALL));
 
-		bool isDraggable;
-		bool isResizeable;
+		uiinteractivity_config config;
 		bool isSelected;
-
-		double distToOutline;
 
 		void update();
 		void drag(float mouseDX, float mouseDY);
@@ -35,8 +52,11 @@ namespace fui {
 		void addFunctionOnClick(std::function<void(int)> func, int arg);
 
 	private:
-		selectedItemManager* sim;
 		bool isResizing;
+		bool isDragging;
+
+		selectedItemManager* sim;
+
 		int xk, yk;
 		glm::vec2 quaterK;
 		void calculateResize(glm::vec2 mousePos);

@@ -2,10 +2,11 @@
 #include "../graphics/fuiscene.h"
 #include "../graphics/model2d.h"
 
-fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder, std::string instanceId)
+fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, 
+	rectBorder2D* modelBoreder, std::string instanceId, uiinteractivity_config config)
 	: position(pos), size(size), rotation(rotation), model(model), modelBoreder(modelBoreder), indstanceId(instanceId), orderInLayer(0) {
 	calculateBoredr();
-	interactivity = uiinteractivity(this);
+	interactivity = uiinteractivity(this, config);
 }
 
 glm::vec2 fui::transform2D::getPositionInPixels() {

@@ -25,7 +25,8 @@ namespace fui {
 		model2D* model;
 		std::string indstanceId;
 
-		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, rectBorder2D* modelBoreder, std::string instanceId);
+		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, 
+			rectBorder2D* modelBoreder, std::string instanceId, uiinteractivity_config config);
 
 		glm::vec2 getPositionInPixels();
 		glm::vec2 getSizeInPixels();
