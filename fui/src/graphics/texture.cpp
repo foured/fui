@@ -3,6 +3,7 @@
 fui::texture::texture() {}
 
 fui::texture::texture(std::string path) {
+	float startTime = glfwGetTime();
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
@@ -13,6 +14,7 @@ fui::texture::texture(std::string path) {
 
 	int width, height, nChannels;
 	unsigned char* data = stbi_load(path.c_str(), &width, &height, &nChannels, 0);
+	unsigned int len = std::strlen(reinterpret_cast<const char*>(data));
 
 	if (data) {
 		GLint colorType = GL_RGB;
@@ -30,6 +32,7 @@ fui::texture::texture(std::string path) {
 	}
 
 	stbi_image_free(data);
+	std::cout << "Texture '" << path << "' size of " << len / 1024 << " KB was loaded in " << glfwGetTime() - startTime << " sec." << std::endl;
 }
 
 void fui::texture::bind() {

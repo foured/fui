@@ -1,5 +1,8 @@
 #include "uiinteractivity.h"
 #include "transform2d.h"
+#include "../graphics/fuiscene.h"
+#include "selectedItemManager.h"
+
 
 fui::uiinteractivity::uiinteractivity(){}
 
@@ -14,26 +17,34 @@ fui::uiinteractivity::uiinteractivity(transform2D* transform)
 }
 
 void fui::uiinteractivity::update() {
-
     float x = scene::getDX();
     float y = scene::getDY();
     glm::vec2 mousePos = scene::getMousePosInNDC();
-    if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos) && instance->model->canBeSelected(instance)) {
-        instance->model->selectedInstanceId = instance->indstanceId;
+    if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos) && sim->canBeSelected(instance)) {
+        sim->selectedItem = instance;
+        sim->makeMeFirstInRender(instance->model);
         instance->orderInLayer = 1;
 
         isSelected = true;
-        isResizing = instance->border.isPointCloseToBorder(mousePos, distToOutline);
-        calculateResize(mousePos);
-
+        if (instance->border.isPointCloseToBorder(mousePos, distToOutline)) {
+            isResizing = true;
+            calculateResize(mousePos);
+            sim->setResizing(this);
+        }
         click();
     }
-    else if (instance->border.isPointCloseToBorder(mousePos, distToOutline) && instance->model->canBeSelected(instance)) {
+    else if (instance->border.isPointCloseToBorder(mousePos, distToOutline) && sim->canBeSelected(instance)) {
         instance->model->addToOutlineShaderQueue(instance->model->getInstaneIdxById(instance->indstanceId), glm::vec3(0.01, 0.42, 0.17));
+
+        sim->makeMeFirstInOutline(instance->model);
+        if (sim->getResizing() && sim->getResisingObject() != this) {
+            sim->sendWishPos(instance->border.getCoordOfContactBorder(mousePos, distToOutline), this);
+        }
     }
     if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
-        if (instance->model->selectedInstanceId == instance->indstanceId) {
+        if (sim->selectedItem == instance) {
             instance->orderInLayer = 0;
+            sim->offResizing();
         }
         isSelected = false;
         isResizing = false;
@@ -60,6 +71,26 @@ void fui::uiinteractivity::resize(float mouseDX, float mouseDY, glm::vec2 mouseP
     }
 }
 
+void fui::uiinteractivity::setResizeWishPos(glm::vec2 pos) {
+    glm::vec2 offset = glm::vec2(0);
+    glm::vec2 min = instance->border.min;
+    glm::vec2 max = instance->border.max;
+    if (quaterK.x > 0) 
+        offset = glm::vec2(pos.x - max.x, offset.y);
+    if (quaterK.x < 0)
+        offset = glm::vec2(pos.x - min.x, offset.y);
+
+    if (quaterK.y > 0)
+        offset = glm::vec2(offset.x, pos.y - max.y);
+    if (quaterK.y < 0)
+        offset = glm::vec2(offset.x, pos.y - min.y);
+
+    offset *= quaterK;
+
+    instance->changeSizeInNDC(offset);
+    instance->addPositionInPixels(glm::vec2(offset.x * scene::width, offset.y * scene::height) * 0.25f * quaterK);
+}
+
 void fui::uiinteractivity::click() {
     for (auto& fn : funcsOnClick_none) {
         fn();
@@ -67,6 +98,10 @@ void fui::uiinteractivity::click() {
     for (auto& fn : funcsOnClick_int) {
         fn.first(fn.second);
     }
+}
+
+void fui::uiinteractivity::setSIM(selectedItemManager* SIM) {
+    sim = SIM;
 }
 
 void fui::uiinteractivity::calculateResize(glm::vec2 mousePos) {

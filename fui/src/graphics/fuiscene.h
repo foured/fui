@@ -28,11 +28,13 @@ namespace fui {
 		void processInput();
 		int init();
 		void registerModel(model2D* model);
+		void renderScene(Shader shader, Shader outlineShader, Shader textShader);
 		void update();
 		void newFrame();
 		bool shouldClose();
 		void terminate();
 		void setShouldClose(bool value);
+		void cleanup();
 
 		static glm::vec2 getMousePosInNDC();
 		static glm::vec2 getMousePosInPixels();
@@ -45,6 +47,8 @@ namespace fui {
 		static bool mouseButtonWentUp(int button);
 		static bool mouseButtonWentDown(int button);
 
+		model2D* getModelById(std::string modelId);
+
 	private:
 		GLFWwindow* window;
 		const char* title;
@@ -56,6 +60,8 @@ namespace fui {
 		static bool mouseButtons[];
 		static bool mouseButtonsWentUp[];
 		static bool mouseButtonsWentDown[];
+
+		selectedItemManager sim;
 	};
 }
 #endif // !FUISCENE_H

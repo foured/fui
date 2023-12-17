@@ -10,11 +10,13 @@
 
 #include "../algorithms/rectboreder2d.h"
 #include "../algorithms/transform2d.h"
-#include "../algorithms/fuifunctions.h"
+#include "../algorithms/selectedItemManager.h"
 
 namespace fui {
 	class transform2D;
 	class uiinteractivity;
+	class selectedItemManager;
+
 	class model2D {
 	public:
 		std::vector<mesh2D> meshes;
@@ -22,7 +24,7 @@ namespace fui {
 		outline modelOutline;
 
 		std::vector<transform2D*> instances;
-		std::string selectedInstanceId;
+		selectedItemManager* sim;
 		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
 
 		model2D(std::string id);
@@ -32,7 +34,8 @@ namespace fui {
 		void prepareOutlineShader(Shader shader);
 
 		void init();
-		void renderInstances(Shader shader, Shader outlineShader);
+		void renderInstances(Shader shader);
+		void renderOutlinedInstances(Shader shader, Shader outlineShader);
 		void renderInstance(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
@@ -43,7 +46,7 @@ namespace fui {
 		rectBorder2D getInstanseBorder(unsigned int instanceIdx);
 		unsigned int getInstaneIdxById(std::string id);
 
-		bool canBeSelected(transform2D* instance);
+		//bool canBeSelected(transform2D* instance);
 
 	private:
 		BufferObject posVBO, sizeVBO;
@@ -53,6 +56,7 @@ namespace fui {
 		std::string generateId();
 
 		Shader outlineShader;
+		std::vector<glm::vec3> oPositions, oSizes;
 	};
 }
 

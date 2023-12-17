@@ -57,10 +57,10 @@
     <ClCompile Include="src\graphics\outline.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\algorithms\fuifunctions.cpp">
+    <ClCompile Include="src\graphics\text.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\text.cpp">
+    <ClCompile Include="src\algorithms\selectedItemManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,10 +113,13 @@
     <ClInclude Include="src\graphics\outline.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\algorithms\fuifunctions.h">
+    <ClInclude Include="src\graphics\text.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\text.h">
+    <ClInclude Include="src\algorithms\selectedItemManager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\algorithms\fuifunctions.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

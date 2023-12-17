@@ -46,12 +46,20 @@ class rect : public fui::model2D {
 public:
     std::vector<float> vertices;
 
-    rect(std::vector<float> _vertices = vert)
-		: vertices(_vertices), model2D("rect"){ }
+    rect(std::string id, std::vector<float> _vertices = vert)
+        : vertices(_vertices), model2D(id) {}
 
-	void init() {
-        //fui::mesh2D ret(glm::vec3(1.0, 0.0, 0.0));      
-        fui::mesh2D ret(fui::texture("assets/textures/jason.jpg"));
+	void init(std::string texturePath) {
+        fui::mesh2D ret(fui::texture(texturePath.c_str()));
+        registerMeshes(ret);
+	}
+    void init(glm::vec3 color) {
+        fui::mesh2D ret(color);      
+        registerMeshes(ret);
+    }
+
+private:
+    void registerMeshes(fui::mesh2D ret) {
         ret.setup(fui::vertex::generateVertices(vertices), indices);
         meshes.push_back(ret);
         calcRectBorder2D();
@@ -61,7 +69,7 @@ public:
         std::vector<fui::mesh2D> oMeshes;
         oMeshes.push_back(oMesh);
         modelOutline.initOutline(oMeshes);
-	}
+    }
 };
 
 #endif // !RECT_HPP

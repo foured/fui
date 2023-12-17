@@ -5,9 +5,6 @@
 
 #include <glm/glm.hpp>
 
-#include "../graphics/fuiscene.h"
-#include "../graphics/model2d.h"
-
 #include "uiinteractivity.h"
 #include "rectboreder2d.h"
 
@@ -35,7 +32,8 @@ namespace fui {
 
 		void setPositionInPixels(glm::vec2 posInPix);
 		void addPositionInPixels(glm::vec2 offsetInPix);
-		void changeSize(glm::vec2 offsetInPix);
+		void changeSizeInPixels(glm::vec2 offsetInPix);
+		void changeSizeInNDC(glm::vec2 offsetInNDC);
 		glm::vec2 changeSizeAndGetMultiplier(glm::vec2 offsetInPix);
 
 	private:

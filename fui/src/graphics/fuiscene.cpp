@@ -22,9 +22,12 @@ fui::scene::scene(int width, int height, const char* title, glm::vec4 color)
 
     fui::scene::width = width;
     fui::scene::height = height;
+
+    //sim = selectedItemManager();
 }
 
 int fui::scene::init() {
+    float startTime = glfwGetTime();
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -80,7 +83,7 @@ int fui::scene::init() {
     std::cout << "Text renderer created." << std::endl;
     FT_Done_FreeType(ft);
 
-    std::cout << "Program started.\n" << std::endl;
+    std::cout << "Program started in " << glfwGetTime() - startTime << " sec.\n" << std::endl;
 
     return 0;
 }
@@ -89,7 +92,16 @@ bool fui::scene::shouldClose() {
     return glfwWindowShouldClose(window);
 }
 void fui::scene::registerModel(model2D* model) {
+    model->sim = &sim;
+    float ts = glfwGetTime();
+    for (transform2D* instance : model->instances) {
+        instance->interactivity.setSIM(model->sim);
+    }
+
     models.push_back(model);
+    sim.renderQueue.push_back(model);
+
+    std::cout << "Model '" << model->id << "' was registered." << std::endl;
 }
 
 void fui::scene::update() {
@@ -98,12 +110,22 @@ void fui::scene::update() {
 
     rememberMouseInputs();
 
-    //processInput();
-    //for (model2D* model : models) {
-    //    for (transform2D* instance : model->instances) {
-    //        instance->interactivity.update();
-    //    }
-    //}
+    processInput();
+    for (model2D* model : models) {
+        for (transform2D* instance : model->instances) {
+            instance->interactivity.update();
+        }
+    }
+}
+
+void fui::scene::renderScene(Shader shader, Shader outlineShader, Shader textShader) {
+    for (model2D* model : sim.renderQueue) {
+        model->renderInstances(shader);
+    }
+    for (model2D* model : sim.outlineQueue) {
+        model->renderOutlinedInstances(shader, outlineShader);
+    }
+    textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
 }
 
 void fui::scene::newFrame() {
@@ -123,6 +145,20 @@ void fui::scene::processInput() {
     if (Keyboard::key(GLFW_KEY_ESCAPE)) {
         setShouldClose(true);
     }
+}
+
+void fui::scene::cleanup() {
+    for (model2D* model : models) {
+        model->cleanup();
+    }
+}
+
+fui::model2D* fui::scene::getModelById(std::string modelId) {
+    for (model2D* model : models) {
+        if (model->id == modelId)
+            return model;
+    }
+    return nullptr;
 }
 
 glm::vec2 fui::scene::getMousePosInNDC() {

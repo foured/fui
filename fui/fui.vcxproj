@@ -142,10 +142,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\algorithms\fuifunctions.cpp" />
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\stb.cpp" />
     <ClCompile Include="src\algorithms\rectboreder2d.cpp" />
+    <ClCompile Include="src\algorithms\selectedItemManager.cpp" />
     <ClCompile Include="src\algorithms\transform2d.cpp" />
     <ClCompile Include="src\algorithms\uiinteractivity.cpp" />
     <ClCompile Include="src\graphics\fuiscene.cpp" />
@@ -169,8 +169,9 @@
     <None Include="assets\shaders\object.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\algorithms\fuifunctions.h" />
+    <ClInclude Include="src\algorithms\fuifunctions.hpp" />
     <ClInclude Include="src\algorithms\rectboreder2d.h" />
+    <ClInclude Include="src\algorithms\selectedItemManager.h" />
     <ClInclude Include="src\algorithms\transform2d.h" />
     <ClInclude Include="src\algorithms\uiinteractivity.h" />
     <ClInclude Include="src\graphics\fuiscene.h" />

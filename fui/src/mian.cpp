@@ -16,7 +16,8 @@
 
 fui::scene scene;
 
-rect r;
+rect r("r1");
+rect c("r2");
 
 void processInput();
 void cleanup();
@@ -28,32 +29,34 @@ int main() {
     Shader textShader("assets/shaders/text.vs", "assets/shaders/text.fs");
     Shader outlineShader ("assets/shaders/outline.vs", "assets/shaders/outline.fs");
 
-    r.init();
+    c.init(glm::vec3(0.1, 0.1, 0.1));
+    c.generateInstance(glm::vec2(0.25, 0.5), glm::vec2(0.5));
+    c.initInstances();
+    scene.registerModel(&c);
+
+    r.init("assets/textures/shrek.jpg");
     r.generateInstance(glm::vec2(0.25, 0.0), glm::vec2(0.5));
     r.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.5));
     r.initInstances();
+    scene.registerModel(&r);
 
     double startTime, endTime;
     std::string fpsmsg;
     while (!scene.shouldClose())
     {
-        startTime = glfwGetTime();
+        //startTime = glfwGetTime();
         scene.update();
-        processInput();
-
-
-        r.renderInstances(shader, outlineShader);
-        scene.textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
+        scene.renderScene(shader, outlineShader, textShader);
 
         scene.newFrame();
-        endTime = glfwGetTime();
-        std::cout << std::string(fpsmsg.length(), '\b');
-        fpsmsg = "fps: " + std::to_string((1 / (endTime - startTime))) + " frame time: " + std::to_string(endTime - startTime);
-        std::cout << fpsmsg;
+        //endTime = glfwGetTime();
+        //std::cout << std::string(fpsmsg.length(), '\b');
+        //fpsmsg = "fps: " + std::to_string((1 / (endTime - startTime))) + " frame time: " + std::to_string(endTime - startTime);
+        //std::cout << fpsmsg;
     }
 
     scene.terminate();
-    cleanup();
+    scene.cleanup();
 	return 0;
 }
 

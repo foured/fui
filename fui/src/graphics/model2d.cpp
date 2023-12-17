@@ -1,7 +1,9 @@
 #include "model2d.h"
+#include "fuiscene.h"
+
 
 fui::model2D::model2D(std::string id)
-	: id(id), currentId("aaaaaaaa"), selectedInstanceId("") {
+	: id(id), currentId("aaaaaaaa") { //selectedInstanceId("")
 }
 
 std::string fui::model2D::generateId() {
@@ -38,10 +40,10 @@ void fui::model2D::prepareOutlineShader(Shader shader) {
 	outlineShader.activate();
 }
 
-void fui::model2D::renderInstances(Shader shader, Shader outlineShader) {
+void fui::model2D::renderInstances(Shader shader) {
 	shader.activate();
 	sortInstancesByLayer();
-	std::vector<glm::vec3> positions, sizes, oPositions, oSizes;
+	std::vector<glm::vec3> positions, sizes;
 	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
 		bool hasOutline = false;
 		for (int j = 0, s = outlineShaderQueue.size(); j < s; j++) {
@@ -71,6 +73,10 @@ void fui::model2D::renderInstances(Shader shader, Shader outlineShader) {
 			meshes[i].render(positions.size(), shader);
 		}
 	}
+
+}
+
+void fui::model2D::renderOutlinedInstances(Shader shader, Shader outlineShader) {
 	for (int i = 0, s = oSizes.size(); i < s; i++) {
 		renderInstance(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
 	}
@@ -86,6 +92,8 @@ void fui::model2D::renderInstances(Shader shader, Shader outlineShader) {
 			meshes[i].render(oPositions.size(), shader);
 		}
 	}
+	oPositions.clear();
+	oSizes.clear();
 	outlineShaderQueue.clear();
 }
 
@@ -126,7 +134,9 @@ void fui::model2D::calcRectBorder2D() {
 }
 
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	instances.push_back(new transform2D(pos, size, rotation, this, &border, generateId()));
+	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId());
+	instance->interactivity.setSIM(sim);
+	instances.push_back(instance);
 }
 
 void fui::model2D::initInstances(){
@@ -185,19 +195,17 @@ void fui::model2D::sortInstancesByLayer() {
 	}
 }
 
-bool fui::model2D::canBeSelected(transform2D* instance) {
-	std::string ciid = instance->indstanceId;
-
-	if (ciid == selectedInstanceId || selectedInstanceId == "") {
-		return true;
-	}
-	else {
-		bool can;
-		can = !instances[getInstaneIdxById(selectedInstanceId)]->border.isDotInRect(scene::getMousePosInNDC());
-		//bool can = !instance->border.isRectInRect(instances[getInstaneIdxById(selectedInstanceId)]->border);
-		return can;
-	}
-}
+//bool fui::model2D::canBeSelected(transform2D* instance) {
+//	std::string ciid = instance->indstanceId;
+//
+//	if (ciid == selectedInstanceId || selectedInstanceId == "") {
+//		return true;
+//	}
+//	else {
+//		bool can = !instances[getInstaneIdxById(selectedInstanceId)]->border.isDotInRect(scene::getMousePosInNDC());
+//		return can;
+//	}
+//}
 
 void fui::model2D::cleanup() {
 	for (mesh2D m : meshes) {
