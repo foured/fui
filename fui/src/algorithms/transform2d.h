@@ -33,6 +33,7 @@ namespace fui {
 
 		void setPositionInPixels(glm::vec2 posInPix);
 		void addPositionInPixels(glm::vec2 offsetInPix);
+		void addPositionInNDC(glm::vec2 offsetInNDC);
 		void changeSizeInPixels(glm::vec2 offsetInPix);
 		void changeSizeInNDC(glm::vec2 offsetInNDC);
 		glm::vec2 changeSizeAndGetMultiplier(glm::vec2 offsetInPix);

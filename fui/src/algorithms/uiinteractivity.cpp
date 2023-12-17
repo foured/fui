@@ -38,16 +38,17 @@ void fui::uiinteractivity::update() {
             && instance->border.getQuatersOfBorderContactWithPoint(mousePos, config.distToOutline) != glm::vec2(0, 1)) {
             isResizing = true;
             calculateResize(mousePos);
-            sim->setResizing(this);
+            sim->action.setAction(selectedItemAction_type::RESIZING, this);
         }
         else if (instance->border.isPointCloseToBorder(mousePos, config.distToOutline)) {
             isDragging = true;
+            sim->action.setAction(selectedItemAction_type::DRAGGING, this);
         }
         click();
     }
     else if (instance->border.isPointCloseToBorder(mousePos, config.distToOutline) && sim->canBeSelected(instance)) {
-        if (sim->getResizing() && sim->getResisingObject() != this) {
-            sim->sendWishPos(instance->border.getCoordOfContactBorder(mousePos, config.distToOutline), this);
+        if (sim->action.getIsInAction() && sim->action.type == selectedItemAction_type::RESIZING && sim->action.getActionObject() != this) {
+            sim->action.sendWishPos(instance->border.getCoordOfContactBorder(mousePos, config.distToOutline), this);
         }
         else {
             if (config.haveOutline)
@@ -55,10 +56,15 @@ void fui::uiinteractivity::update() {
             sim->makeMeFirstInOutline(instance->model);
         }
     }
+    else if (instance->border.isPointCloseToBorderOutside(mousePos, config.distToOutline * 2)) {
+        if (sim->action.getIsInAction() && sim->action.type == selectedItemAction_type::DRAGGING && sim->action.getActionObject() != this) {
+            sim->action.sendWishPos(instance->border.getCoordOfContactBorderOutSide(mousePos, config.distToOutline * 2), this);
+        }
+    }
     if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
         if (sim->selectedItem == instance) {
             instance->orderInLayer = 0;
-            sim->offResizing();
+            sim->action.offAction();
         }
         isSelected = false;
         isResizing = false;
@@ -102,6 +108,10 @@ void fui::uiinteractivity::setResizeWishPos(glm::vec2 pos) {
 
     instance->changeSizeInNDC(offset);
     instance->addPositionInPixels(glm::vec2(offset.x * scene::width, offset.y * scene::height) * 0.25f * quaterK);
+}
+void fui::uiinteractivity::setDragWishPos(glm::vec2 pos) {
+    glm::vec2 max = instance->border.max;
+    instance->addPositionInNDC(glm::vec2(pos.x - instance->border.origin.x, pos.y - instance->border.max.y));
 }
 void fui::uiinteractivity::click() {
     for (auto& fn : funcsOnClick_none) {

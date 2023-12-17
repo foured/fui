@@ -44,23 +44,11 @@ namespace fui {
 
 		selectedItemAction action;
 
-		void setResizing(uiinteractivity* interactivity);
-		void offResizing();
-		bool getResizing();
-		uiinteractivity* getWPSender();
-		uiinteractivity* getResisingObject();
-		void sendWishPos(glm::vec2 wp, uiinteractivity* sebder);
-
 		void makeMeFirstInOutline(model2D* model);
 		void makeMeFirstInRender(model2D* model);
 		bool canBeSelected(transform2D* instance);
 
 	private:
-		bool haveWP;
-		bool isResizing;
-		uiinteractivity* resizedObject;
-		uiinteractivity* wpSender;
-		glm::vec2 wishPos;
 	};
 }
 

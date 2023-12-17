@@ -28,6 +28,11 @@ void fui::transform2D::addPositionInPixels(glm::vec2 offsetInPix) {
 	setPositionInPixels(getPositionInPixels() + offsetInPix);
 }
 
+void fui::transform2D::addPositionInNDC(glm::vec2 offsetInNDC) {
+	position += offsetInNDC;
+	calculateBoredr();
+}
+
 void fui::transform2D::calculateBoredr() {
 	border = rectBorder2D(modelBoreder->min * size + position, modelBoreder->max * size + position);
 }

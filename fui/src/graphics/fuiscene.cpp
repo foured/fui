@@ -133,7 +133,7 @@ void fui::scene::renderScene(Shader shader, Shader outlineShader, Shader textSha
     if (sim.markerPositions.size() > 0)
         sim.markerPositions.clear();
     marker->clearInstances();
-    textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
+    //textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
 }
 void fui::scene::newFrame() {
     glfwSwapBuffers(window);

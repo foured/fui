@@ -49,6 +49,16 @@ glm::vec2 fui::rectBorder2D::getCoordOfContactBorder(glm::vec2 point, double dis
 
 	return res;
 }
+glm::vec2 fui::rectBorder2D::getCoordOfContactBorderOutSide(glm::vec2 point, double distToBorder) {
+	glm::vec2 res = glm::vec2(0);
+
+	if (rectBorder2D(glm::vec2(min.x, min.y - distToBorder), glm::vec2(max.x, min.y)).isDotInRect(point)) res = glm::vec2(origin.x, min.y); // down
+	if (rectBorder2D(glm::vec2(min.x, max.y), glm::vec2(max.x, max.y + distToBorder)).isDotInRect(point)) res = glm::vec2(origin.x, max.y);// top
+	if (rectBorder2D(glm::vec2(min.x - distToBorder, min.y), glm::vec2(min.x, max.y)).isDotInRect(point)) res = glm::vec2(min.x, origin.y); // left
+	if (rectBorder2D(glm::vec2(max.x, min.y), glm::vec2(max.x + distToBorder, max.y)).isDotInRect(point)) res = glm::vec2(max.x, origin.y);// right
+
+	return res;
+}
 glm::vec2 fui::rectBorder2D::getQuatersOfBorderContactWithPoint(glm::vec2 point, double distToBorder) {
 	glm::vec2 res = glm::vec2(0.0);
 
