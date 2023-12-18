@@ -56,9 +56,23 @@ void fui::uiinteractivity::update() {
             sim->makeMeFirstInOutline(instance->model);
         }
     }
-    else if (instance->border.isPointCloseToBorderOutside(mousePos, config.distToOutline * 2)) {
-        if (sim->action.getIsInAction() && sim->action.type == selectedItemAction_type::DRAGGING && sim->action.getActionObject() != this) {
-            sim->action.sendWishPos(instance->border.getCoordOfContactBorderOutSide(mousePos, config.distToOutline * 2), this);
+    else if(sim->action.getIsInAction() && sim->action.type == selectedItemAction_type::DRAGGING && sim->action.getActionObject() != this){
+        transform2D* aInstance = sim->action.getActionObject()->instance;
+
+        if (instance->border.isPointCloseToBorderOutside(mousePos, config.distToOutline * 2)) { //top
+            glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(mousePos, config.distToOutline * 2);
+            sim->action.sendWishPos(contact, this);
+            sim->action.setDopData(glm::vec2(contact.x, aInstance->border.max.y));
+        }
+        else if (instance->border.isPointCloseToBorderOutside(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2)) { //right
+            glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2);
+            sim->action.sendWishPos(contact, this);
+            sim->action.setDopData(glm::vec2(aInstance->border.max.x, contact.y));
+        }
+        else if (instance->border.isPointCloseToBorderOutside(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2)) { //left
+            glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2);
+            sim->action.sendWishPos(contact, this);
+            sim->action.setDopData(glm::vec2(aInstance->border.min.x, contact.y));
         }
     }
     if (scene::mouseButtonWentUp(GLFW_MOUSE_BUTTON_1)) {
@@ -109,9 +123,11 @@ void fui::uiinteractivity::setResizeWishPos(glm::vec2 pos) {
     instance->changeSizeInNDC(offset);
     instance->addPositionInPixels(glm::vec2(offset.x * scene::width, offset.y * scene::height) * 0.25f * quaterK);
 }
-void fui::uiinteractivity::setDragWishPos(glm::vec2 pos) {
-    glm::vec2 max = instance->border.max;
-    instance->addPositionInNDC(glm::vec2(pos.x - instance->border.origin.x, pos.y - instance->border.max.y));
+void fui::uiinteractivity::setDragWishPos(glm::vec2 pos, glm::vec2 startPos) {
+    //glm::vec2 max = instance->border.max;
+    //glm::vec2 t(instance->border.origin.x, instance->border.max.y);
+    //instance->addPositionInNDC(glm::vec2(pos.x - instance->border.origin.x, pos.y - instance->border.max.y));
+    instance->addPositionInNDC(pos - startPos);
 }
 void fui::uiinteractivity::click() {
     for (auto& fn : funcsOnClick_none) {
