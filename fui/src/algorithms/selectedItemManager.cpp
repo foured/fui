@@ -9,25 +9,26 @@ bool fui::selectedItemAction::getIsInAction() {
 void fui::selectedItemAction::setAction(fui::selectedItemAction_type actionType, fui::uiinteractivity* interactivity) {
 	isInAction = true;
 	type = actionType;
-	haveWP = false;
 	actionObject = interactivity;
 }
 void fui::selectedItemAction::setDopData(glm::vec2 data) {
 	dopData = data;
 }
 void fui::selectedItemAction::offAction() {
-	isInAction = false;
-	if (haveWP && type == selectedItemAction_type::RESIZING && wpSender->instance->border.
-		isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline)&& sim->canBeSelected(wpSender->instance)) {
-		actionObject->setResizeWishPos(wishPos);
+	if (isInAction) {
+		isInAction = false;
+		if (haveWP && type == selectedItemAction_type::RESIZING && wpSender->instance->border.
+			isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline) && sim->canBeSelected(wpSender->instance)) {
+			actionObject->setResizeWishPos(wishPos);
+		}
+		else if (haveWP && type == selectedItemAction_type::DRAGGING
+			&& (wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2))
+			|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
+			|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
+			actionObject->setDragWishPos(wishPos, dopData);
+		}
+		haveWP = false;
 	}
-	else if (haveWP && type == selectedItemAction_type::DRAGGING 
-		&& (wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2)) 
-		||  wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
-		||  wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
-		actionObject->setDragWishPos(wishPos, dopData);
-	}
-	haveWP = false;
 }
 fui::uiinteractivity* fui::selectedItemAction::getWPSender() {
 	return wpSender;
