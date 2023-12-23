@@ -151,6 +151,7 @@
     <ClCompile Include="src\graphics\fuiscene.cpp" />
     <ClCompile Include="src\graphics\mesh2d.cpp" />
     <ClCompile Include="src\graphics\model2d.cpp" />
+    <ClCompile Include="src\graphics\parent.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\text.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="src\graphics\model2d.h" />
     <ClInclude Include="src\graphics\models\circle.hpp" />
     <ClInclude Include="src\graphics\models\rect.hpp" />
+    <ClInclude Include="src\graphics\parent.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\text.h" />
     <ClInclude Include="src\graphics\texture.h" />

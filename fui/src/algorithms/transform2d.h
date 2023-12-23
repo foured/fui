@@ -22,6 +22,7 @@ namespace fui {
 		rectBorder2D border;
 		uiinteractivity interactivity;
 
+		transform2D* parent;
 		model2D* model;
 		std::string indstanceId;
 

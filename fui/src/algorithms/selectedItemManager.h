@@ -40,8 +40,8 @@ namespace fui {
 	public:
 		selectedItemManager();
 		transform2D* selectedItem;
-		std::vector<model2D*> outlineQueue;
-		std::vector<model2D*> renderQueue;
+		std::vector<transform2D*> outlineQueue;
+		std::vector<transform2D*> renderQueue;
 		std::vector<glm::vec2> markerPositions;
 
 		selectedItemAction action;

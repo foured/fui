@@ -60,6 +60,9 @@
     <ClCompile Include="src\algorithms\selectedItemManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\parent.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
@@ -117,6 +120,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\models\circle.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\parent.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
