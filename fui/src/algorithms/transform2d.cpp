@@ -43,12 +43,11 @@ void fui::transform2D::setOutline(glm::vec3 color) {
 }
 
 void fui::transform2D::addPositionInNDC(glm::vec2 offsetInNDC) {
-	glm::vec2 offset = offsetInNDC - position;
 	position += offsetInNDC;
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		child->addPositionInNDC(child->position - offset);
+		child->addPositionInNDC(offsetInNDC);
 	}
 }
 
@@ -67,7 +66,9 @@ void fui::transform2D::changeSizeInPixels(glm::vec2 offsetInPix) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		child->changeSizeInPixels(offsetInPix);
+		if (child->interactivity.config.linkSize) {
+			child->changeSizeInPixels(offsetInPix);
+		}
 	}
 }
 
@@ -81,7 +82,9 @@ void fui::transform2D::changeSizeInNDC(glm::vec2 offsetInNDC) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		child->changeSizeInNDC(offsetInNDC);
+		if (child->interactivity.config.linkSize) {
+			child->changeSizeInNDC(offsetInNDC);
+		}
 	}
 }
 
@@ -103,7 +106,9 @@ glm::vec2 fui::transform2D::changeSizeAndGetMultiplier(glm::vec2 offsetInPix) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		child->changeSizeAndGetMultiplier(offsetInPix);
+		if (child->interactivity.config.linkSize) {
+			child->changeSizeAndGetMultiplier(offsetInPix);
+		}
 	}
 
 	return multiplier;

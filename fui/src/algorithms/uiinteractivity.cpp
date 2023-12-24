@@ -15,6 +15,7 @@ fui::uiinteractivity_config::uiinteractivity_config(uiinteractivity_config_type 
         isDraggable = true;
         haveOutline = true;
     }
+    linkSize = false;
     distToOutline = 0.02;
 }
 

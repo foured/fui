@@ -26,6 +26,7 @@ namespace fui {
 		bool isDraggable;
 		bool isResizeable;
 		bool haveOutline;
+		bool linkSize;
 
 		double distToOutline;
 	};

@@ -33,14 +33,18 @@ int main() {
     scene.registerModel(&r1);
     r1.generateInstance(glm::vec2(0.25, 0.0), glm::vec2(0.5));
     r1.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.5));
+    r1.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.125));
     r1.initInstances();
+
 
     r2.init(glm::vec3(0.1, 0.1, 0.1));
     scene.registerModel(&r2);
     r2.generateInstance(glm::vec2(0.25, 0.5), glm::vec2(0.5));
     r2.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.25));
-    r2.instances[1]->setParent(r1.instances[1]);
     r2.initInstances();
+
+    r2.instances[1]->setParent(r1.instances[1]);
+    r1.instances[2]->setParent(r2.instances[1]);
 
     c.init(16, glm::vec3(1, 0, 0));
     scene.registerMarker(&c);

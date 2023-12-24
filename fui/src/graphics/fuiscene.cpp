@@ -17,15 +17,12 @@ void fui::scene::framebufferSizeCallback(GLFWwindow* widnow, int width, int heig
     // update variables
     scene::width = width;
     scene::height = height;
-
-    //fui::scene::border = rectBorder2D(glm::vec2(0.0), glm::vec2(width, height));
 }
 fui::scene::scene(int width, int height, const char* title, glm::vec4 color)
-    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border)) {
+    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border, true)) {
 
     fui::scene::width = width;
     fui::scene::height = height;
-    //fui::scene::border = rectBorder2D(glm::vec2(0.0), glm::vec2(width, height));
 }
 int fui::scene::init() {
     float startTime = glfwGetTime();
@@ -97,11 +94,9 @@ void fui::scene::registerModel(model2D* model) {
     std::cout << "Model '" << model->id << "' was registered." << std::endl;
 }
 void fui::scene::registerMarker(circle* m) {
-    //m->sim = &sim;
-    //for (transform2D* instance : m->instances) {
-    //    instance->interactivity.setSIM(m->sim);
-    //}
-    //marker = m;
+    m->root = iAmParent;
+    marker = m;
+    std::cout << "Marker '" << m->id << "' was registered." << std::endl;
 }
 void fui::scene::update() {
     glClearColor(windowColor[0], windowColor[1], windowColor[2], windowColor[3]);
@@ -118,19 +113,24 @@ void fui::scene::update() {
 }
 void fui::scene::renderScene(Shader shader, Shader outlineShader, Shader textShader) {
     iAmParent->renderChildren(shader, outlineShader);
+
+    //marker shit
+    for (glm::vec2 pos : iAmParent->sim.markerPositions) {
+        marker->generateInstance(pos, glm::vec2(0.02));
+    }
+    marker->renderInstances(shader);
+    for (transform2D* mi : marker->instances) {
+        removeValueFromVector(&iAmParent->children, mi);
+    }
+    iAmParent->sim.markerPositions.clear();
+    marker->clearInstances();
+
     /*for (model2D* model : sim.renderQueue) {
         model->renderInstances(shader);
     }
     for (model2D* model : sim.outlineQueue) {
         model->renderOutlinedInstances(shader, outlineShader);
-    }
-    for (glm::vec2 pos : sim.markerPositions) {
-        marker->generateInstance(pos, glm::vec2(0.02));
-    }
-    marker->renderInstances(shader);
-    if (sim.markerPositions.size() > 0)
-        sim.markerPositions.clear();
-    marker->clearInstances();*/
+    }*/
     //textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
 }
 void fui::scene::newFrame() {

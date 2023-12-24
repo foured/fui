@@ -19,7 +19,11 @@ namespace fui {
 	void removeValueFromVector(std::vector<T>* vec, T value) {
 		vec->erase(std::remove(vec->begin(), vec->end(), value), vec->end());
 	}
-
+	template<typename T>
+	void addTwoVectors(std::vector<T>& vec1, std::vector<T>& vec2) {
+		for (T val : vec2)
+			vec1.push_back(val);
+	}
 	inline int mapNegOneOneToZeroOne(int val) {
 		return (val + 1.0) / 2.0;
 	}

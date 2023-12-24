@@ -48,8 +48,6 @@ namespace fui {
 		void makeMeFirstInOutline(transform2D* model);
 		void makeMeFirstInRender(transform2D* model);
 		bool canBeSelected(transform2D* instance);
-
-	private:
 	};
 }
 
