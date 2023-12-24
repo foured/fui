@@ -5,7 +5,6 @@
 #include "fuifunctions.hpp"
 
 namespace fui {
-	class transform2d;
 	class model2d;
 	enum selectedItemAction_type : char {
 		FREE,
@@ -46,8 +45,8 @@ namespace fui {
 
 		selectedItemAction action;
 
-		void makeMeFirstInOutline(model2D* model);
-		void makeMeFirstInRender(model2D* model);
+		void makeMeFirstInOutline(transform2D* model);
+		void makeMeFirstInRender(transform2D* model);
 		bool canBeSelected(transform2D* instance);
 
 	private:

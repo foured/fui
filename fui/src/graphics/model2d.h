@@ -22,7 +22,7 @@ namespace fui {
 		std::string id;
 
 		std::vector<transform2D*> instances;
-		selectedItemManager* sim;
+		parent* root;
 		uiinteractivity_config uiinteractivityConfig;
 		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
 
@@ -32,7 +32,8 @@ namespace fui {
 		void addToOutlineShaderQueue(int instanceIdx, glm::vec3 color);
 		void renderInstances(Shader shader);
 		void renderOutlinedInstances(Shader shader, Shader outlineShader);
-		void renderInstance(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
+		void renderInstance_outline(Shader shader, Shader outlineShader, transform2D* transform);
+		void renderInstance_template(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
 		void calcRectBorder2D();
 		void generateInstance(glm::vec2 pos, glm::vec2 size = glm::vec2(1.0), glm::vec3 rotation = glm::vec3(0.0));
 		void initInstances();

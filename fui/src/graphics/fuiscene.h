@@ -15,6 +15,7 @@
 #include "../graphics/text.h"
 #include "model2d.h"
 #include "models/circle.hpp"
+#include "parent.h"
 
 namespace fui {
 	class scene {
@@ -63,7 +64,8 @@ namespace fui {
 		static bool mouseButtonsWentUp[];
 		static bool mouseButtonsWentDown[];
 
-		selectedItemManager sim;
+		parent* iAmParent;
+		static rectBorder2D border;
 		circle* marker;
 	};
 }

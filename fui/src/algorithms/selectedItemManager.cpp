@@ -21,11 +21,12 @@ void fui::selectedItemAction::offAction() {
 			isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline) && sim->canBeSelected(wpSender->instance)) {
 			actionObject->setResizeWishPos(wishPos);
 		}
-		else if (haveWP && type == selectedItemAction_type::DRAGGING
-			&& (wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2))
-			|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
-			|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
-			actionObject->setDragWishPos(wishPos, dopData);
+		else if (haveWP && type == selectedItemAction_type::DRAGGING && wpSender != nullptr){
+			if (wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2)
+				|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
+				|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
+					actionObject->setDragWishPos(wishPos, dopData);
+			}
 		}
 		haveWP = false;
 	}
@@ -56,7 +57,7 @@ bool fui::selectedItemManager::canBeSelected(transform2D* instance) {
 		return !selectedItem->border.isDotInRect(scene::getMousePosInNDC());
 	}
 }
-void fui::selectedItemManager::makeMeFirstInOutline(model2D* model) {
+void fui::selectedItemManager::makeMeFirstInOutline(transform2D* model) {
 	if (isVectorContainsValue(outlineQueue, model)) {
 		removeValueFromVector(&outlineQueue, model);
 		outlineQueue.push_back(model);
@@ -65,7 +66,7 @@ void fui::selectedItemManager::makeMeFirstInOutline(model2D* model) {
 		outlineQueue.push_back(model);
 	}
 }
-void fui::selectedItemManager::makeMeFirstInRender(model2D* model) {
+void fui::selectedItemManager::makeMeFirstInRender(transform2D* model) {
 	if (isVectorContainsValue(renderQueue, model)) {
 		removeValueFromVector(&renderQueue, model);
 		renderQueue.push_back(model);

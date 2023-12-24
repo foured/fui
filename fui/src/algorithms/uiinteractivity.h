@@ -45,18 +45,17 @@ namespace fui {
 		void resize(float mouseDX, float mouseDY, glm::vec2 mousePos);
 		void click();
 
-		void setSIM(selectedItemManager* SIM);
 		void setResizeWishPos(glm::vec2 pos);
 		void setDragWishPos(glm::vec2 pos, glm::vec2 startPos);
 
 		void addFunctionOnClick(std::function<void()> func);
 		void addFunctionOnClick(std::function<void(int)> func, int arg);
 
+		selectedItemManager* getsim();
+
 	private:
 		bool isResizing;
 		bool isDragging;
-
-		selectedItemManager* sim;
 
 		int xk, yk;
 		glm::vec2 quaterK;

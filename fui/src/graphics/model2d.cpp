@@ -66,7 +66,7 @@ void fui::model2D::renderInstances(Shader shader) {
 
 void fui::model2D::renderOutlinedInstances(Shader shader, Shader outlineShader) {
 	for (int i = 0, s = oSizes.size(); i < s; i++) {
-		renderInstance(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
+		renderInstance_template(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
 	}
 	shader.activate();
 	if (oPositions.size() > 0) {
@@ -85,7 +85,15 @@ void fui::model2D::renderOutlinedInstances(Shader shader, Shader outlineShader) 
 	outlineShaderQueue.clear();
 }
 
-void fui::model2D::renderInstance(Shader shader, transform2D* transform, glm::vec3 color) {
+void fui::model2D::renderInstance_outline(Shader shader, Shader outlineShader, transform2D* instance) {
+	if (instance->hasOutline) {
+		renderInstance_template(outlineShader, instance, instance->outlineColor);
+		instance->hasOutline = false;
+	}
+	renderInstance_template(shader, instance);
+}
+
+void fui::model2D::renderInstance_template(Shader shader, transform2D* transform, glm::vec3 color) {
 	shader.activate();
 
 	if (color != glm::vec3(-1.0)) {
@@ -121,8 +129,7 @@ void fui::model2D::calcRectBorder2D() {
 	}
 }
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), uiinteractivityConfig);
-	instance->interactivity.setSIM(sim);
+	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
 	instances.push_back(instance);
 }
 

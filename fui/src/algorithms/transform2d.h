@@ -10,6 +10,7 @@
 
 namespace fui {
 	class model2D;
+	class parent;
 
 	class transform2D {
 	public:
@@ -18,16 +19,24 @@ namespace fui {
 		glm::vec3 rotation;
 
 		int orderInLayer;
+		bool hasOutline;
+		glm::vec3 outlineColor;
 
 		rectBorder2D border;
 		uiinteractivity interactivity;
 
-		transform2D* parent;
+		parent* iAmParent;
+
 		model2D* model;
 		std::string indstanceId;
 
 		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, 
-			rectBorder2D* modelBoreder, std::string instanceId, uiinteractivity_config config);
+			rectBorder2D* modelBoreder, std::string instanceId, parent* parent, uiinteractivity_config config);
+
+		void setOutline(glm::vec3 color);
+		void setParent(transform2D* instance);
+		void setParent(parent* parent);
+		parent* getParent();
 
 		glm::vec2 getPositionInPixels();
 		glm::vec2 getSizeInPixels();
@@ -41,6 +50,7 @@ namespace fui {
 
 	private:
 		rectBorder2D* modelBoreder;
+		parent* myParent;
 		void calculateBoredr();
 	};
 }

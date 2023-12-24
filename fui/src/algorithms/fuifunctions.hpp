@@ -19,5 +19,9 @@ namespace fui {
 	void removeValueFromVector(std::vector<T>* vec, T value) {
 		vec->erase(std::remove(vec->begin(), vec->end(), value), vec->end());
 	}
+
+	inline int mapNegOneOneToZeroOne(int val) {
+		return (val + 1.0) / 2.0;
+	}
 }
 #endif
