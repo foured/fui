@@ -13,6 +13,12 @@ namespace fui {
 	class selectedItemAction;
 	enum selectedItemAction_type;
 
+	struct ds_LinkSize
+	{
+		bool x;
+		bool y;
+	};
+
 	enum uiinteractivity_config_type : char {
 		ACTIVE_ALL,
 		DISABLE_ALL,
@@ -26,9 +32,8 @@ namespace fui {
 		bool isDraggable;
 		bool isResizeable;
 		bool haveOutline;
-		bool linkSize;
-
 		double distToOutline;
+		ds_LinkSize linkSize;
 	};
 
 	class uiinteractivity {

@@ -54,7 +54,10 @@ void fui::parent::renderChildren(Shader shader, Shader outlineShader) {
 			obj->iAmParent->renderChildren(shader, outlineShader);
 		}
 		sim.outlineQueue.clear();
-		addTwoVectors(getRoot()->sim.markerPositions, sim.markerPositions);
+		if (!isRoot) {
+			addTwoVectors(getRoot()->sim.markerPositions, sim.markerPositions);
+			sim.markerPositions.clear();
+		}
 
 		glDisable(GL_SCISSOR_TEST);
 	}

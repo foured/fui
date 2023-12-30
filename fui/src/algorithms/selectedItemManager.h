@@ -19,7 +19,7 @@ namespace fui {
 		selectedItemAction_type type;
 		bool getIsInAction();
 		void setAction(selectedItemAction_type type, uiinteractivity* interactivity);
-		void setDopData(glm::vec2 data);
+		void setDopData(glm::vec2 data, bool boolData = false);
 		void offAction();
 		uiinteractivity* getWPSender();
 		uiinteractivity* getActionObject();
@@ -32,7 +32,8 @@ namespace fui {
 		uiinteractivity* actionObject;
 		uiinteractivity* wpSender;
 		glm::vec2 wishPos;
-		glm::vec2 dopData;
+		glm::vec2 dopData_v2;
+		bool dopData_b;
 	};
 
 	class selectedItemManager {

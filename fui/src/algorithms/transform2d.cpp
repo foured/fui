@@ -70,9 +70,12 @@ void fui::transform2D::changeSizeInPixels(glm::vec2 offsetInPix) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		if (child->interactivity.config.linkSize) {
-			child->changeSizeInPixels(offsetInPix);
-		}
+		glm::vec2 offset(0);
+		if (child->interactivity.config.linkSize.x)
+			offset = glm::vec2(offsetInPix.x, offset.y);
+		if (child->interactivity.config.linkSize.y)
+			offset = glm::vec2(offset.x, offsetInPix.y);
+		child->changeSizeInPixels(offset);
 	}
 }
 
@@ -86,9 +89,12 @@ void fui::transform2D::changeSizeInNDC(glm::vec2 offsetInNDC) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		if (child->interactivity.config.linkSize) {
-			child->changeSizeInNDC(offsetInNDC);
-		}
+		glm::vec2 offset(0);
+		if (child->interactivity.config.linkSize.x)
+			offset = glm::vec2(offsetInNDC.x, offset.y);
+		if (child->interactivity.config.linkSize.y)
+			offset = glm::vec2(offset.x, offsetInNDC.y);
+		child->changeSizeInPixels(offset);
 	}
 }
 
@@ -110,9 +116,12 @@ glm::vec2 fui::transform2D::changeSizeAndGetMultiplier(glm::vec2 offsetInPix) {
 	calculateBoredr();
 
 	for (transform2D* child : iAmParent->children) {
-		if (child->interactivity.config.linkSize) {
-			child->changeSizeAndGetMultiplier(offsetInPix);
-		}
+		glm::vec2 offset(0);
+		if (child->interactivity.config.linkSize.x)
+			offset = glm::vec2(offsetInPix.x, offset.y);
+		if (child->interactivity.config.linkSize.y)
+			offset = glm::vec2(offset.x, offsetInPix.y);
+		child->changeSizeInPixels(offset);
 	}
 
 	return multiplier;

@@ -15,7 +15,8 @@ fui::uiinteractivity_config::uiinteractivity_config(uiinteractivity_config_type 
         isDraggable = true;
         haveOutline = true;
     }
-    linkSize = false;
+    linkSize.x = false;
+    linkSize.y = false;
     distToOutline = 0.02;
 }
 
@@ -33,6 +34,7 @@ void fui::uiinteractivity::update() {
     float x = scene::getDX();
     float y = scene::getDY();
     glm::vec2 mousePos = scene::getMousePosInNDC();
+    selectedItemManager* pSim = &instance->iAmParent->sim;
     if (scene::mouseButtonWentDown(GLFW_MOUSE_BUTTON_1) && instance->border.isDotInRect(mousePos) && getsim()->canBeSelected(instance)) {
         getsim()->selectedItem = instance;
         getsim()->makeMeFirstInRender(instance);
@@ -80,25 +82,22 @@ void fui::uiinteractivity::update() {
             getsim()->action.setDopData(glm::vec2(aInstance->border.min.x, contact.y));
         }
     }
-
-    //selectedItemManager* pSim = &instance->iAmParent->sim;
-    //if (pSim->action.getIsInAction() && pSim->action.type == selectedItemAction_type::DRAGGING && pSim->action.getActionObject() != this) {
+    //else if (pSim->action.getIsInAction() && pSim->action.type == selectedItemAction_type::DRAGGING && pSim->action.getActionObject() != this) {
     //    transform2D* aInstance = pSim->action.getActionObject()->instance;
-
-    //    if (instance->border.isPointCloseToBorderOutside(mousePos, config.distToOutline * 2)) { //top
-    //        glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(mousePos, config.distToOutline * 2);
+    //    if (instance->border.isPointCloseToBorder(mousePos, config.distToOutline * 2)) { //top
+    //        glm::vec2 contact = instance->border.getCoordOfContactBorder(mousePos, config.distToOutline * 2);
     //        pSim->action.sendWishPos(contact, this);
-    //        pSim->action.setDopData(glm::vec2(contact.x, aInstance->border.max.y));
+    //        pSim->action.setDopData(glm::vec2(contact.x, aInstance->border.max.y), true);
     //    }
-    //    else if (instance->border.isPointCloseToBorderOutside(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2)) { //right
-    //        glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2);
+    //    else if (instance->border.isPointCloseToBorder(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2)) { //right
+    //        glm::vec2 contact = instance->border.getCoordOfContactBorder(glm::vec2(aInstance->border.max.x, aInstance->border.origin.y), config.distToOutline * 2);
     //        pSim->action.sendWishPos(contact, this);
-    //        pSim->action.setDopData(glm::vec2(aInstance->border.max.x, contact.y));
+    //        pSim->action.setDopData(glm::vec2(aInstance->border.max.x, contact.y), true);
     //    }
-    //    else if (instance->border.isPointCloseToBorderOutside(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2)) { //left
-    //        glm::vec2 contact = instance->border.getCoordOfContactBorderOutSide(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2);
+    //    else if (instance->border.isPointCloseToBorder(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2)) { //left
+    //        glm::vec2 contact = instance->border.getCoordOfContactBorder(glm::vec2(aInstance->border.min.x, aInstance->border.origin.y), config.distToOutline * 2);
     //        pSim->action.sendWishPos(contact, this);
-    //        pSim->action.setDopData(glm::vec2(aInstance->border.min.x, contact.y));
+    //        pSim->action.setDopData(glm::vec2(aInstance->border.min.x, contact.y), true);
     //    }
     //}
 

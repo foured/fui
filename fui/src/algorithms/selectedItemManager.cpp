@@ -11,8 +11,9 @@ void fui::selectedItemAction::setAction(fui::selectedItemAction_type actionType,
 	type = actionType;
 	actionObject = interactivity;
 }
-void fui::selectedItemAction::setDopData(glm::vec2 data) {
-	dopData = data;
+void fui::selectedItemAction::setDopData(glm::vec2 data, bool boolData) {
+	dopData_v2 = data;
+	dopData_b = boolData;
 }
 void fui::selectedItemAction::offAction() {
 	if (isInAction) {
@@ -22,10 +23,15 @@ void fui::selectedItemAction::offAction() {
 			actionObject->setResizeWishPos(wishPos);
 		}
 		else if (haveWP && type == selectedItemAction_type::DRAGGING && wpSender != nullptr){
-			if (wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2)
+			if (!dopData_b && wpSender->instance->border.isPointCloseToBorderOutside(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2)
 				|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
 				|| wpSender->instance->border.isPointCloseToBorderOutside(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
-					actionObject->setDragWishPos(wishPos, dopData);
+					actionObject->setDragWishPos(wishPos, dopData_v2);
+			}
+			else if (dopData_b && wpSender->instance->border.isPointCloseToBorder(scene::getMousePosInNDC(), wpSender->config.distToOutline * 2)
+				|| wpSender->instance->border.isPointCloseToBorder(glm::vec2(actionObject->instance->border.max.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)
+				|| wpSender->instance->border.isPointCloseToBorder(glm::vec2(actionObject->instance->border.min.x, actionObject->instance->border.origin.y), wpSender->config.distToOutline * 2)) {
+				actionObject->setDragWishPos(wishPos, dopData_v2);
 			}
 		}
 		haveWP = false;

@@ -45,7 +45,7 @@ int main() {
 
     r2.instances[1]->setParent(r1.instances[1]);
     r1.instances[2]->setParent(r2.instances[1]);
-
+    
     std::cout << "Everything started in: "<< glfwGetTime() - st << "sec. Now the program can be used." << std::endl;
     while (!scene.shouldClose())
     {
