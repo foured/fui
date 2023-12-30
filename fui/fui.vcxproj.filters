@@ -63,6 +63,9 @@
     <ClCompile Include="src\graphics\parent.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\marker.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="glfw3.dll" />
@@ -119,10 +122,10 @@
     <ClInclude Include="src\algorithms\fuifunctions.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\models\circle.hpp">
+    <ClInclude Include="src\graphics\parent.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\parent.h">
+    <ClInclude Include="src\graphics\marker.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

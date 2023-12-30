@@ -13,8 +13,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "../graphics/text.h"
+
 #include "model2d.h"
-#include "models/circle.hpp"
+#include "marker.h"
 #include "parent.h"
 
 namespace fui {
@@ -30,7 +31,6 @@ namespace fui {
 		void processInput();
 		int init();
 		void registerModel(model2D* model);
-		void registerMarker(circle* marker);
 		void renderScene(Shader shader, Shader outlineShader, Shader textShader);
 		void update();
 		void newFrame();
@@ -65,9 +65,8 @@ namespace fui {
 		static bool mouseButtonsWentDown[];
 
 		parent* iAmParent;
-		parent* iAmParent_oneFrame;
 		static rectBorder2D border;
-		circle* marker;
+		marker marker;
 	};
 }
 #endif // !FUISCENE_H

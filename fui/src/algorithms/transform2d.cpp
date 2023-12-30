@@ -14,6 +14,7 @@ fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation,
 }
 
 fui::transform2D::~transform2D() {
+
 }
 
 glm::vec2 fui::transform2D::getPositionInPixels() {

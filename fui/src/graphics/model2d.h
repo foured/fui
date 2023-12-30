@@ -21,8 +21,7 @@ namespace fui {
 		std::vector<mesh2D> meshes;
 		std::string id;
 
-		//std::vector<transform2D*> instances;
-		std::vector<std::shared_ptr<transform2D>> instances;
+		std::vector<transform2D*> instances;
 		parent* root;
 		uiinteractivity_config uiinteractivityConfig;
 		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
@@ -30,9 +29,7 @@ namespace fui {
 		model2D(std::string id);
 
 		void init();
-		void addToOutlineShaderQueue(int instanceIdx, glm::vec3 color);
 		void renderInstances(Shader shader);
-		void renderOutlinedInstances(Shader shader, Shader outlineShader);
 		void renderInstance_outline(Shader shader, Shader outlineShader, transform2D* transform);
 		void renderInstance_template(Shader shader, transform2D* transform, glm::vec3 color = glm::vec3(-1.0));
 		void calcRectBorder2D();

@@ -86,8 +86,7 @@ void fui::model2D::calcRectBorder2D() {
 	}
 }
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	std::shared_ptr<transform2D> instance = std::make_shared<transform2D>(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
-	//transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
+	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
 	instances.push_back(instance);
 }
 
@@ -122,8 +121,7 @@ void fui::model2D::initInstances(){
 }
 
 fui::rectBorder2D fui::model2D::getInstanseBorder(unsigned int instanceIdx) {
-	//transform2D* instance = instances[instanceIdx];
-	std::shared_ptr<transform2D> instance = instances[instanceIdx];
+	transform2D* instance = instances[instanceIdx];
 	return rectBorder2D(glm::vec2(border.min.x + instance->position.x, border.min.y + instance->position.y) * instance->size,
 		glm::vec2(border.max.x + instance->position.x, border.max.y + instance->position.y) * instance->size);
 }
@@ -139,7 +137,7 @@ void fui::model2D::sortInstancesByLayer() {
 	for (unsigned int i = 1; i < instances.size(); i++) {
 		for (unsigned int j = 0; j < instances.size() - i; j++) {
 			if (instances[j]->orderInLayer > instances[j + 1]->orderInLayer) {
-				std::shared_ptr<transform2D> temp = instances[j];
+				transform2D* temp = instances[j];
 				instances[j] = instances[j + 1];
 				instances[j + 1] = temp;
 			}

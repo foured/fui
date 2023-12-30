@@ -12,15 +12,14 @@
 #include "graphics/shader.h"
 #include "graphics/mesh2d.h"
 #include "graphics/text.h"
+#include "graphics/marker.h"
 
 #include "graphics/models/rect.hpp"
-#include "graphics/models/circle.hpp"
 
 fui::scene scene;
 
 rect r1("r1");
 rect r2("r2");
-circle c;
 
 int main() {
     double st = glfwGetTime();
@@ -44,12 +43,8 @@ int main() {
     r2.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.25));
     r2.initInstances();
 
-    r2.instances[1]->setParent(r1.instances[1].get());
-    r1.instances[2]->setParent(r2.instances[1].get());
-
-    c.init(16, glm::vec3(1.0, 0.0, 0.0));
-    c.initInstances();
-    scene.registerMarker(&c);
+    r2.instances[1]->setParent(r1.instances[1]);
+    r1.instances[2]->setParent(r2.instances[1]);
 
     std::cout << "Everything started in: "<< glfwGetTime() - st << "sec. Now the program can be used." << std::endl;
     while (!scene.shouldClose())

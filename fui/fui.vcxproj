@@ -149,6 +149,7 @@
     <ClCompile Include="src\algorithms\transform2d.cpp" />
     <ClCompile Include="src\algorithms\uiinteractivity.cpp" />
     <ClCompile Include="src\graphics\fuiscene.cpp" />
+    <ClCompile Include="src\graphics\marker.cpp" />
     <ClCompile Include="src\graphics\mesh2d.cpp" />
     <ClCompile Include="src\graphics\model2d.cpp" />
     <ClCompile Include="src\graphics\parent.cpp" />
@@ -175,9 +176,9 @@
     <ClInclude Include="src\algorithms\transform2d.h" />
     <ClInclude Include="src\algorithms\uiinteractivity.h" />
     <ClInclude Include="src\graphics\fuiscene.h" />
+    <ClInclude Include="src\graphics\marker.h" />
     <ClInclude Include="src\graphics\mesh2d.h" />
     <ClInclude Include="src\graphics\model2d.h" />
-    <ClInclude Include="src\graphics\models\circle.hpp" />
     <ClInclude Include="src\graphics\models\rect.hpp" />
     <ClInclude Include="src\graphics\parent.h" />
     <ClInclude Include="src\graphics\shader.h" />

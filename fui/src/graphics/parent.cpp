@@ -55,7 +55,6 @@ void fui::parent::renderChildren(Shader shader, Shader outlineShader) {
 		}
 		sim.outlineQueue.clear();
 		addTwoVectors(getRoot()->sim.markerPositions, sim.markerPositions);
-		//std::cout << sim.markerPositions.size() << std::endl;
 
 		glDisable(GL_SCISSOR_TEST);
 	}

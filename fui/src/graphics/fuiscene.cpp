@@ -19,7 +19,7 @@ void fui::scene::framebufferSizeCallback(GLFWwindow* widnow, int width, int heig
     scene::height = height;
 }
 fui::scene::scene(int width, int height, const char* title, glm::vec4 color)
-    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border, true)), iAmParent_oneFrame(new parent(&fui::scene::border, true)) {
+    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border, true)), marker(glm::vec3(1.0, 0.0, 0.0)) {
 
     fui::scene::width = width;
     fui::scene::height = height;
@@ -81,6 +81,7 @@ int fui::scene::init() {
     std::cout << "Text renderer created." << std::endl;
     FT_Done_FreeType(ft);
 
+    marker.init();
     std::cout << "Program started in " << glfwGetTime() - startTime << " sec.\n" << std::endl;
 
     return 0;
@@ -92,11 +93,6 @@ void fui::scene::registerModel(model2D* model) {
     model->root = iAmParent;
     models.push_back(model);
     std::cout << "Model '" << model->id << "' was registered." << std::endl;
-}
-void fui::scene::registerMarker(circle* m) {
-    m->root = iAmParent_oneFrame;
-    marker = m;
-    std::cout << "Marker '" << m->id << "' was registered." << std::endl;
 }
 void fui::scene::update() {
     glClearColor(windowColor[0], windowColor[1], windowColor[2], windowColor[3]);
@@ -114,30 +110,23 @@ void fui::scene::update() {
 void fui::scene::renderScene(Shader shader, Shader outlineShader, Shader textShader) {
     iAmParent->renderChildren(shader, outlineShader);
     //marker shit
-    for (glm::vec2 pos : iAmParent->sim.markerPositions)
-        marker->generateInstance(pos, glm::vec2(0.02));
-    iAmParent_oneFrame->renderChildren(shader, outlineShader);
+    marker.render(shader, iAmParent->sim.markerPositions);
     iAmParent->sim.markerPositions.clear();
-    marker->clearInstances();
-
-    /*for (model2D* model : sim.renderQueue) {
-        model->renderInstances(shader);
-    }
-    for (model2D* model : sim.outlineQueue) {
-        model->renderOutlinedInstances(shader, outlineShader);
-    }*/
-    //textRenderer.render(textShader, "Hello", 100, 100, glm::vec2(10.0, 5.0), glm::vec3(1.0));
 }
+
 void fui::scene::newFrame() {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
+
 void fui::scene::terminate() {
     glfwTerminate();
 }
+
 void fui::scene::setShouldClose(bool value) {
     glfwSetWindowShouldClose(window, value);
 }
+
 void fui::scene::processInput() {
     if (Keyboard::key(GLFW_KEY_ESCAPE)) {
         setShouldClose(true);
@@ -147,7 +136,7 @@ void fui::scene::cleanup() {
     for (model2D* model : models) {
         model->cleanup();
     }
-    marker->cleanup();
+    marker.cleanup();
 }
 fui::model2D* fui::scene::getModelById(std::string modelId) {
     for (model2D* model : models) {
@@ -156,6 +145,7 @@ fui::model2D* fui::scene::getModelById(std::string modelId) {
     }
     return nullptr;
 }
+
 glm::vec2 fui::scene::getMousePosInNDC() {
     int x = Mouse::getMouseX();
     int y = Mouse::getMouseY();
@@ -165,10 +155,12 @@ glm::vec2 fui::scene::getMousePosInNDC() {
 
     return glm::vec2((x2s - 0.5f) * 2, - (y2s - 0.5f) * 2);
 }
+
 glm::vec2 fui::scene::getMousePosInPixels() {
     glm::vec2 res = glm::vec2(Mouse::getMouseX(), 800.0 - Mouse::getMouseY());
     return res;
 }
+
 void fui::scene::rememberMouseInputs() {
     mouseDX = Mouse::getDX();
     mouseDY = Mouse::getDY();
@@ -179,18 +171,23 @@ void fui::scene::rememberMouseInputs() {
         mouseButtonsWentDown[i] = Mouse::buttonWentDown(i);
     }
 }
+
 double fui::scene::getDX() {
     return mouseDX;
 }
+
 double fui::scene::getDY() {
     return mouseDY;
 }
+
 bool fui::scene::mouseButton(int button) {
     return mouseButtons[button];
 }
+
 bool fui::scene::mouseButtonWentUp(int button) {
     return mouseButtonsWentUp[button];
 }
+
 bool fui::scene::mouseButtonWentDown(int button) {
     return mouseButtonsWentDown[button];
 }
