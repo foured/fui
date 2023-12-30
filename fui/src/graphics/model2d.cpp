@@ -21,36 +21,15 @@ std::string fui::model2D::generateId() {
 	return currentId;
 }
 
-void fui::model2D::addToOutlineShaderQueue(int instanceIdx, glm::vec3 color) {
-	std::pair<int, glm::vec3>a;
-	a.first = instanceIdx;
-	a.second = color;
-	outlineShaderQueue.push_back(a);
-}
-
 void fui::model2D::renderInstances(Shader shader) {
-	shader.activate();
-	sortInstancesByLayer();
-	std::vector<glm::vec3> positions, sizes;
-	for (unsigned int i = 0, size = instances.size(); i < size; i++) {
-		bool hasOutline = false;
-		for (int j = 0, s = outlineShaderQueue.size(); j < s; j++) {
-			if (i == outlineShaderQueue[j].first) {
-				hasOutline = true;
-				break;
-			}
-		}
-		if (!hasOutline) {
+	if (instances.size() > 0) {
+		shader.activate();
+		sortInstancesByLayer();
+		std::vector<glm::vec3> positions, sizes;
+		for (unsigned int i = 0, size = instances.size(); i < size; i++) {
 			positions.push_back(glm::vec3(instances[i]->position, 0.0));
 			sizes.push_back(glm::vec3(instances[i]->size, 1.0));
 		}
-		else {
-			oPositions.push_back(glm::vec3(instances[i]->position, 0.0));
-			oSizes.push_back(glm::vec3(instances[i]->size, 1.0));
-		}
-	}
-
-	if (positions.size() > 0) {
 		posVBO.bind();
 		posVBO.updateData<glm::vec3>(0, positions.size(), &positions[0]);
 
@@ -61,28 +40,6 @@ void fui::model2D::renderInstances(Shader shader) {
 			meshes[i].render(positions.size(), shader);
 		}
 	}
-
-}
-
-void fui::model2D::renderOutlinedInstances(Shader shader, Shader outlineShader) {
-	for (int i = 0, s = oSizes.size(); i < s; i++) {
-		renderInstance_template(outlineShader, instances[outlineShaderQueue[i].first], outlineShaderQueue[i].second);
-	}
-	shader.activate();
-	if (oPositions.size() > 0) {
-		posVBO.bind();
-		posVBO.updateData<glm::vec3>(0, oPositions.size(), &oPositions[0]);
-
-		sizeVBO.bind();
-		sizeVBO.updateData<glm::vec3>(0, oPositions.size(), &oSizes[0]);
-
-		for (int i = 0, len = meshes.size(); i < len; i++) {
-			meshes[i].render(oPositions.size(), shader);
-		}
-	}
-	oPositions.clear();
-	oSizes.clear();
-	outlineShaderQueue.clear();
 }
 
 void fui::model2D::renderInstance_outline(Shader shader, Shader outlineShader, transform2D* instance) {
@@ -106,13 +63,13 @@ void fui::model2D::renderInstance_template(Shader shader, transform2D* transform
 	sizes.push_back(glm::vec3(transform->size, 1.0));
 
 	posVBO.bind();
-	posVBO.updateData<glm::vec3>(0, instances.size(), &positions[0]);
+	posVBO.updateData<glm::vec3>(0, 1, &positions[0]);
 
 	sizeVBO.bind();
-	sizeVBO.updateData<glm::vec3>(0, instances.size(), &sizes[0]);
+	sizeVBO.updateData<glm::vec3>(0, 1, &sizes[0]);
 
 	for (int i = 0, len = meshes.size(); i < len; i++) {
-		meshes[i].render(instances.size(), shader);
+		meshes[i].render(1, shader);
 	}
 }
 void fui::model2D::calcRectBorder2D() {
@@ -129,7 +86,8 @@ void fui::model2D::calcRectBorder2D() {
 	}
 }
 void fui::model2D::generateInstance(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation) {
-	transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
+	std::shared_ptr<transform2D> instance = std::make_shared<transform2D>(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
+	//transform2D* instance = new transform2D(pos, size, rotation, this, &border, generateId(), root, uiinteractivityConfig);
 	instances.push_back(instance);
 }
 
@@ -164,7 +122,8 @@ void fui::model2D::initInstances(){
 }
 
 fui::rectBorder2D fui::model2D::getInstanseBorder(unsigned int instanceIdx) {
-	transform2D* instance = instances[instanceIdx];
+	//transform2D* instance = instances[instanceIdx];
+	std::shared_ptr<transform2D> instance = instances[instanceIdx];
 	return rectBorder2D(glm::vec2(border.min.x + instance->position.x, border.min.y + instance->position.y) * instance->size,
 		glm::vec2(border.max.x + instance->position.x, border.max.y + instance->position.y) * instance->size);
 }
@@ -180,7 +139,7 @@ void fui::model2D::sortInstancesByLayer() {
 	for (unsigned int i = 1; i < instances.size(); i++) {
 		for (unsigned int j = 0; j < instances.size() - i; j++) {
 			if (instances[j]->orderInLayer > instances[j + 1]->orderInLayer) {
-				transform2D* temp = instances[j];
+				std::shared_ptr<transform2D> temp = instances[j];
 				instances[j] = instances[j + 1];
 				instances[j + 1] = temp;
 			}
@@ -195,8 +154,9 @@ void fui::model2D::cleanup() {
 }
 
 void fui::model2D::clearInstances() {
-	if(instances.size() > 0)
+	if (instances.size() > 0) {
 		instances.clear();
+	}
 }
 
 void fui::model2D::init(){}

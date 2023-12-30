@@ -19,7 +19,7 @@ void fui::scene::framebufferSizeCallback(GLFWwindow* widnow, int width, int heig
     scene::height = height;
 }
 fui::scene::scene(int width, int height, const char* title, glm::vec4 color)
-    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border, true)) {
+    : title(title), windowColor(color), iAmParent(new parent(&fui::scene::border, true)), iAmParent_oneFrame(new parent(&fui::scene::border, true)) {
 
     fui::scene::width = width;
     fui::scene::height = height;
@@ -94,7 +94,7 @@ void fui::scene::registerModel(model2D* model) {
     std::cout << "Model '" << model->id << "' was registered." << std::endl;
 }
 void fui::scene::registerMarker(circle* m) {
-    m->root = iAmParent;
+    m->root = iAmParent_oneFrame;
     marker = m;
     std::cout << "Marker '" << m->id << "' was registered." << std::endl;
 }
@@ -106,22 +106,17 @@ void fui::scene::update() {
 
     processInput();
     for (model2D* model : models) {
-        for (transform2D* instance : model->instances) {
+        for (auto instance : model->instances) {
             instance->interactivity.update();
         }
     }
 }
 void fui::scene::renderScene(Shader shader, Shader outlineShader, Shader textShader) {
     iAmParent->renderChildren(shader, outlineShader);
-
     //marker shit
-    for (glm::vec2 pos : iAmParent->sim.markerPositions) {
+    for (glm::vec2 pos : iAmParent->sim.markerPositions)
         marker->generateInstance(pos, glm::vec2(0.02));
-    }
-    marker->renderInstances(shader);
-    for (transform2D* mi : marker->instances) {
-        removeValueFromVector(&iAmParent->children, mi);
-    }
+    iAmParent_oneFrame->renderChildren(shader, outlineShader);
     iAmParent->sim.markerPositions.clear();
     marker->clearInstances();
 
@@ -152,6 +147,7 @@ void fui::scene::cleanup() {
     for (model2D* model : models) {
         model->cleanup();
     }
+    marker->cleanup();
 }
 fui::model2D* fui::scene::getModelById(std::string modelId) {
     for (model2D* model : models) {

@@ -32,6 +32,7 @@ namespace fui {
 
 		transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation, model2D* model, 
 			rectBorder2D* modelBoreder, std::string instanceId, parent* parent, uiinteractivity_config config);
+		~transform2D();
 
 		void setOutline(glm::vec3 color);
 		void setParent(transform2D* instance);

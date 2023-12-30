@@ -34,13 +34,39 @@ public:
 		calcRectBorder2D();
 		uiinteractivityConfig = fui::uiinteractivity_config(fui::uiinteractivity_config_type::DISABLE_ALL);
 	}
-	void renderInstances(Shader shader) {
-		if (instances.size() > 0 && !hasInitInstances) {
-			initInstances();
-			hasInitInstances = true;
+	void initInstances() {
+		std::vector<glm::vec3> positions, sizes;
+		positions.emplace_back(0);
+		sizes.emplace_back(0);
+		posVBO = BufferObject(GL_ARRAY_BUFFER);
+		posVBO.generate();
+		posVBO.bind();
+		posVBO.setData<glm::vec3>(1, &positions[0], GL_DYNAMIC_DRAW);
+
+		sizeVBO = BufferObject(GL_ARRAY_BUFFER);
+		sizeVBO.generate();
+		sizeVBO.bind();
+		sizeVBO.setData<glm::vec3>(1, &sizes[0], GL_DYNAMIC_DRAW);
+
+		for (unsigned int i = 0, size = meshes.size(); i < size; i++) {
+			meshes[i].VAO.bind();
+
+			posVBO.bind();
+			posVBO.setAttPointer<glm::vec3>(3, 3, GL_FLOAT, 1, 0, 1);
+
+			sizeVBO.bind();
+			sizeVBO.setAttPointer<glm::vec3>(2, 3, GL_FLOAT, 1, 0, 1);
+
+			ArrayObject::clear();
 		}
-		model2D::renderInstances(shader);
 	}
+	//void renderInstances(Shader shader) {
+	//	if (instances.size() > 0 && !hasInitInstances) {
+	//		initInstances();
+	//		hasInitInstances = true;
+	//	}
+	//	model2D::renderInstances(shader);
+	//}
 };
 
 #endif

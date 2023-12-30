@@ -7,10 +7,13 @@ fui::transform2D::transform2D(glm::vec2 pos, glm::vec2 size, glm::vec3 rotation,
 	rectBorder2D* modelBoreder, std::string instanceId, parent* parent, uiinteractivity_config config)
 	: position(pos), size(size), rotation(rotation), model(model), modelBoreder(modelBoreder), indstanceId(instanceId), orderInLayer(0), 
 	myParent(parent), iAmParent(new fui::parent(this)) {
+	hasOutline = false;
 	myParent->addChild(this);
 	calculateBoredr();
-	hasOutline = false;
 	interactivity = uiinteractivity(this, config);
+}
+
+fui::transform2D::~transform2D() {
 }
 
 glm::vec2 fui::transform2D::getPositionInPixels() {

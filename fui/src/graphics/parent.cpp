@@ -40,10 +40,11 @@ void fui::parent::renderChildren(Shader shader, Shader outlineShader) {
 		}
 
 		glScissor(x, y, w, h);
-
 		for (transform2D* obj : sim.renderQueue) {
-			obj->model->renderInstance_template(shader, obj);
-			obj->iAmParent->renderChildren(shader, outlineShader);
+			if (!isVectorContainsValue(sim.outlineQueue, obj)) {
+				obj->model->renderInstance_template(shader, obj);
+				obj->iAmParent->renderChildren(shader, outlineShader);
+			}
 		}
 		glDisable(GL_SCISSOR_TEST);
 		glEnable(GL_SCISSOR_TEST);
@@ -54,6 +55,7 @@ void fui::parent::renderChildren(Shader shader, Shader outlineShader) {
 		}
 		sim.outlineQueue.clear();
 		addTwoVectors(getRoot()->sim.markerPositions, sim.markerPositions);
+		//std::cout << sim.markerPositions.size() << std::endl;
 
 		glDisable(GL_SCISSOR_TEST);
 	}

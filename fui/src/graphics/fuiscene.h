@@ -65,6 +65,7 @@ namespace fui {
 		static bool mouseButtonsWentDown[];
 
 		parent* iAmParent;
+		parent* iAmParent_oneFrame;
 		static rectBorder2D border;
 		circle* marker;
 	};

@@ -23,6 +23,7 @@ rect r2("r2");
 circle c;
 
 int main() {
+    double st = glfwGetTime();
     scene.init();
 
     Shader shader("assets/shaders/object.vs", "assets/shaders/object.fs");
@@ -43,14 +44,14 @@ int main() {
     r2.generateInstance(glm::vec2(-0.25, 0.0), glm::vec2(0.25));
     r2.initInstances();
 
-    r2.instances[1]->setParent(r1.instances[1]);
-    r1.instances[2]->setParent(r2.instances[1]);
+    r2.instances[1]->setParent(r1.instances[1].get());
+    r1.instances[2]->setParent(r2.instances[1].get());
 
-    c.init(16, glm::vec3(1, 0, 0));
+    c.init(16, glm::vec3(1.0, 0.0, 0.0));
+    c.initInstances();
     scene.registerMarker(&c);
 
-    double startTime, endTime;
-    std::string fpsmsg;
+    std::cout << "Everything started in: "<< glfwGetTime() - st << "sec. Now the program can be used." << std::endl;
     while (!scene.shouldClose())
     {
         scene.update();

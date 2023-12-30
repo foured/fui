@@ -21,7 +21,8 @@ namespace fui {
 		std::vector<mesh2D> meshes;
 		std::string id;
 
-		std::vector<transform2D*> instances;
+		//std::vector<transform2D*> instances;
+		std::vector<std::shared_ptr<transform2D>> instances;
 		parent* root;
 		uiinteractivity_config uiinteractivityConfig;
 		std::vector<std::pair<int, glm::vec3>> outlineShaderQueue;
@@ -46,8 +47,10 @@ namespace fui {
 
 		//bool canBeSelected(transform2D* instance);
 
-	private:
+	protected:
 		BufferObject posVBO, sizeVBO;
+
+	private:
 		rectBorder2D border;
 
 		std::string currentId;
